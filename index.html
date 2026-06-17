@@ -1,57 +1,115 @@
 <!DOCTYPE html>
 <html>
-    <head>
-     <link rel="stylesheet" href="style.css">
-    <title>Hotel Kraljevac</title>
-    </head>
-  <body>
-
-     <header>
-        <div>
-            <img  class="logo" src="./images/Adobe Express - file.png" alt="Logo hotela Kraljevac">
-            <h1>Hotel Kraljevac</h1>
-        </div>
+<head>
+ <link rel="stylesheet" href="style.css">
+ <title>Hotel Kraljevac</title>
+</head>
+<body>
+    <header>
+      <div>
+        <img  class="logo" src="./images/Adobe Express - file.png" alt="Logo hotela Kraljevac">
+        <h1>Hotel Kraljevac</h1>
+      </div>
         <nav>
-            <ul>
-                <li><a href="#pocetna">Početna</a></li>
-                <li><a href="#o-nama">O nama</a></li>
-                <li><a href="#rezervacije">Rezervacije</a></li>
-                <li><a href="#posao">Posao</a></li>
-            </ul>
+          <ul>
+            <li><a href="#pocetna">Početna</a></li>
+            <li><a href="#o-nama">O nama</a></li>
+            <li><a href="#usluge">Usluge</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+          </ul>
         </nav>
     </header>
 
     <main> 
-        <section id="pocetna" class="hero">
-        <h1>Hotel Kraljevac</h1>
-        <p>Dobrodošli na web stranicu našeg hotela. Ovdje možete pronaći sve potrebne informacije. </p>
-            <ul>
-              <li>Rezervacije </li>
-              <li>Informacije</li>
-              <li>Aplikacije za posao</li>
-            </ul>
-            <button id="gumb-akcija" class="btn">
-              Iskoristi posebnu ponudu
-            </button>
-            <p id="tekst-izmjena" ></p>
-        <img class="hotel-slika" src="./images/kraljevac.jpg" alt=" Vanjski izgled hotela Kraljevac">
-        </section>
+      <section id="pocetna" class="hero">
+        <div class="hero-image-container">
+          <img class="hotel-slika" src="./images/kraljevac.jpg" alt="Hotel Kraljevac - Odmor uz rijeku Sanu">
+        </div>
 
-        <section id="o-nama" class="about-us">
-            <h2>O nama</h2>
-            <p>Hotel Kraljevac nudi vrhunski komfor, ljubazno osoblje i nezaboravno iskustvo u srcu prirode. Naš cilj je da se osjećate kao kod kuće.</p>
-        </section>    
+        <div class="hero-content">
+          <h1 class="hero-title">Odmor <br> u srcu<br>prirode</h1>
+          <p class="hero-subtitle">
+            Pronađite svoj mir na desnoj obali rijeke Sane. Hotel Kraljevac spaja vrhunski komfor sa netaknutom prirodom, bogatim šumama i jednim od najljepših riječnih revira u Evropi.
+          </p>
+        
+          <div class="cta-wrapper">
+            <button id="gumb-akcija" class="btn">
+              Rezerviši smještaj <span class="btn-arrow">›</span>
+            </button>
+            <p id="tekst-izmjena"></p>
+          </div>
+
+        </div>
+      </section>
+
+      <section id="o-nama" class="about-us">
+        <h2>O nama</h2>
+        <p>Hotel Kraljevac se nalazi na sjeverozapadu Bosne i Hercegovine, u općini Ključ. Smješten je na desnoj obali rijeke Sane, tačnije u naselju Kraljevac po kojem je i dobio ime.
+           Hotel je počeo sa radom 2017. godine s ciljem promocije turističkih kapaciteta općine Ključ i razvoja ribolovnog turizma. Smješten je na najatraktivnijem dijelu rijeke Sane, u ribolovnom reviru Zmajevac, koji važi za jedan od najatraktivnijih revira za lov na mladicu u Evropi. Prirodni ambijent koji okružuje ovaj moderni objekat sa četiri zvjezdice izuzetno je bogat kako prirodnim ljepotama, tako i historijskim i kulturnim obilježjima ovog dijela Bosne i Hercegovine.
+           Kuhinja hotela Kraljevac pretežno se bazira na modernom pristupu pripremi i konzumaciji hrane. Pored toga, u našoj ponudi su zastupljena tradicionalna bosanska jela, kao i bogat asortiman mediteranske kuhinje. Iz ponude izdvajamo i jela sa roštilja, poput popularnih odrezaka (steak) koje pripremamo od pažljivo odabranih komada mesa. Vrhunska domaća vina upotpunit će ukus svih naših jela pripremljenih sa puno ljubavi i profesionalizma.</p>
+      </section>
+      
+     <section id="usluge" class="ponuda-sekcija">
+        <div class="sekcija-zaglavlje">
+            <h2>Naše usluge</h2>
+            <p>Otkrijte sve sadržaje i pogodnosti koje Hotel Kraljevac nudi svojim gostima.</p>
+        </div>
+
+        <div class="ponuda-grid">
+            <div class="ponuda-kartica">
+                <div class="kartica-slika-wrapper">
+                    <img src="./images/smjestaj.jpg" alt="Moderni smještaj hotela Kraljevac" class="kartica-slika">
+                </div>
+                <div class="kartica-sadrzaj">
+                    <h3>Smještaj</h3>
+                    <p>Odaberite neku od naših jedanaest moderno opremljenih soba s pogledom na rijeku.</p>
+                </div>
+            </div>
+
+            <div class="ponuda-kartica">
+                <div class="kartica-slika-wrapper">
+                    <img src="./images/restoran.jpg" alt="Restoran hotela Kraljevac" class="kartica-slika">
+                </div>
+                <div class="kartica-sadrzaj">
+                    <h3>Restoran</h3>
+                    <p>Uživajte u spoju mediteranske i tradicionalne bosanske kuhinje te vrhunskim vinima.</p>
+                </div>
+            </div>
+
+            <div class="ponuda-kartica">
+                <div class="kartica-slika-wrapper">
+                    <img src="./images/terasa.jpg" alt="Terasa hotela pored Sane" class="kartica-slika">
+                </div>
+                <div class="kartica-sadrzaj">
+                    <h3>Terasa uz Sanu</h3>
+                    <p>Provedite tople sunčane dane na našoj terasi smještenoj uz prelijepu rijeku Sanu.</p>
+                </div>
+            </div>
+
+            <div class="ponuda-kartica">
+                <div class="kartica-slika-wrapper">
+                    <img src="./images/svadbeni-salon.jpg" alt="Svadbeni salon hotela Kraljevac" class="kartica-slika">
+                </div>
+                <div class="kartica-sadrzaj">
+                    <h3>Svadbeni salon</h3>
+                    <p>Organizujte vaše svadbe, proslave i poslovne događaje u sali do sto mjesta.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
     </main>
 
-    <footer>
-        <div class="footer-links">
-            <h3>Tražiš posao?</h3>
-            <ul>
-              <li><a href="#posao">Aplikacije za posao</a></li>
-            </ul>
-        </div>
-        <div class="footer-bottom">
-        </div>
+    <footer id="kontakt">
+      <div class="footer-links">
+        <h3>Zgon b.b., Ključ, Bosna i Hercegovina</h3>
+        <ul>
+          <li>+387 37 675 345</li>
+          <li>kraljevacdoo@gmail.com</li>
+        </ul>
+      </div>
+      <div class="footer-bottom">
+      </div>
     </footer>
     <script src="script.js"></script>
   </body>
