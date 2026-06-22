@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400..900;1,400..900&display=swap');
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9f6;
+    color: #2c332e;           
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+    overflow-x: hidden;
+}
+
+main {
+    width: 100%;
+    max-width: 1100px;        
+    margin: 40px auto 0 auto; 
+    padding: 0 20px; 
+    flex: 1; 
+    box-sizing: border-box; 
+}
+
+header {
+    width: 100%;
+    box-sizing: border-box;
+    background: #ffffff; 
+    color: #1a3322;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3vw; 
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(26, 51, 34, 0.15);
+}
+
+header > div {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+}
+
+header h1 {
+    font-size: clamp(14px, 2vw, 20px);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin: 0;
+    white-space: nowrap; 
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: clamp(2px, 1vw, 6px); 
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    color: #1a3322;
+    text-decoration: none;
+    font-size: clamp(11px, 1.5vw, 14px);
+    padding: 8px clamp(6px, 1.2vw, 16px);
+    font-weight: 400;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap; 
+}
+
+nav a:hover {
+    color: #a3c6a8; 
+    background: rgba(26, 51, 34, 0.05); 
+}
+
+.hero {
+    max-width: 1200px;  
+    margin-left: auto;   
+    margin-right: auto;  
+    margin-bottom: 60px;
+    padding-top: 0px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px; 
+    align-items: center;
+    min-height: 550px;
+}
+
+.hero-image-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; 
+}
+
+.hero-slika {
+    width: 100%;
+    max-width: 400px;
+    height: 400px;
+    object-fit: contain; 
+    box-shadow: 0 20px 40px rgba(26, 51, 34, 0.08);
+    box-shadow: none; 
+    background-color: #f7f9f6;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 64px;
+    line-height: 1.15;
+    font-weight: 400;
+    color: #1a3322; 
+    margin: 0 0 25px 0;
+}
+
+.hero-title::first-letter {
+    text-transform: uppercase;
+}
+
+.hero-subtitle {
+    font-size: 16px;
+    color: #4a544e;
+    max-width: 440px;
+    margin: 0 0 40px 0;
+}
+
+.ponuda-sekcija {
+    padding: 40px 0;
+}
+
+.sekcija-zaglavlje {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.sekcija-zaglavlje h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px;
+    color: #1a3322;
+    margin: 0 0 10px 0;
+}
+
+.sekcija-zaglavlje p {
+    color: #666666;
+    margin: 0;
+}
+
+
+.ponuda-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;           
+    box-sizing: border-box; 
+}
+
+.ponuda-kartica {
+    background-color: #ffffff;
+    border: 1px solid #e0e6e4;
+    display: flex;
+    flex-direction: column;
+}
+
+.kartica-slika-wrapper {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    align-items: center;       
+    justify-content: center;   
+    padding: 15px;           
+    box-sizing: border-box;
+}
+
+.kartica-slika {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;      
+    display: block;
+}
+
+.kartica-sadrzaj {
+    padding: 20px;
+}
+
+.kartica-sadrzaj h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    color: #1a3322;
+    margin: 0 0 10px 0;
+}
+
+.kartica-sadrzaj p {
+    font-size: 14px;
+    color: #555555;
+    margin: 0;
+}
+
+footer {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #12152d; 
+    color: #ffffff;
+    padding: 40px; 
+    margin-top: 40px;
+    text-align: center;
+    flex-shrink: 0; 
+}
+
+footer h3 {
+    font-size: 16px;
+    margin-top: 0;
+    font-weight: normal;
+}
+
+footer ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+@media (max-width: 992px) {
+    .ponuda-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        width: 100%;           
+        box-sizing: border-box; 
+    }
+}
+
+@media (max-width: 650px) {
+    .ponuda-grid {
+        grid-template-columns: 1fr;
+        gap: 15px; 
+    }
+}

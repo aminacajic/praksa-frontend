@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/sport-detalji.css">
+    <title>Detalji o sportu</title>
+</head>
+<body>
+    <header>
+        <div>
+            <h1 class="klik-naslov" onclick="window.location.href='index.html'">BH sport</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Nazad na početnu</a></li>
+                <li><a href="index.html#sportisti">Sportovi</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="sekcija-zaglavlje">
+            <div class="sport-detalji-kontejner">
+                <div class="sport-tekst">
+                    <h2 id="sport-naziv">Učitavanje...</h2>
+                    <p id="sport-savez-info">Molimo sačekajte, podaci se učitavaju...</p>
+                </div>
+                
+                <div class="sport-galerija-slajder">
+                    <button type="button" class="slajder-btn prethodna" id="slajder-nazad">&#10094;</button>
+                    
+                    <div class="slajder-slika-okvir">
+                        <img id="slajder-trenutna-slika" src="./images/placeholder.png" alt="Galerija sporta">
+                    </div>
+    
+                    <button type="button" class="slajder-btn sljedeca" id="slajder-naprijed">&#10095;</button>
+                </div> 
+            </div>
+        </section>
+
+        <section class="ponuda-sekcija">
+            <h3 class="naslov-sekcije">Sportisti</h3>
+            <div class="ponuda-grid" id="sportisti-grid"></div>
+        </section>
+    </main>
+
+    <footer id="kontakt"></footer>
+    <script src="./js/sport-detalj.js"></script>
+    <script src="./js/zajednicko.js"></script>
+</body>
+</html>

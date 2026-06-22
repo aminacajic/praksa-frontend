@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/admin.css">
+    <title>BH Sport - Admin panel</title>
+</head>
+<body>
+    <header></header>
+    <main>
+        <div class="admin-kontejner">
+        
+            <div class="odabir-akcije">
+                <p>Šta želite raditi u bazi podataka?</p>
+                <button type="button" id="btn-prikazi-sport" class="btn-izbor">Novi sport</button>
+                <button type="button" id="btn-prikazi-sportistu" class="btn-izbor">Novi sportista</button>
+                <button type="button" id="btn-prikazi-upravljanje" class="btn-izbor">Uređivanje</button>
+            </div>
+            <section id="sekcija-sport" class="admin-sekcija">
+                <h2>Dodaj novi sport</h2>
+                    <form id="forma-sport">
+                        <input type="hidden" id="sport-edit-id" value="">
+                        <div class="forma-grupa">
+                            <label for="sport-id">ID sporta (mora biti jedna riječ, npr: kosarka, tenis):</label>
+                            <input type="text" id="sport-id" required placeholder="npr. tenis">
+                        </div>
+
+                        <div class="forma-grupa">
+                            <label for="sport-naziv-unos">Naziv sporta:</label>
+                            <input type="text" id="sport-naziv-unos" required placeholder="npr. Tenis">
+                        </div>
+
+                        <div class="forma-grupa">
+                            <label for="sport-slika">Uploaduj sliku sporta:</label>
+                            <input type="file" id="sport-slika" accept="image/*" required>
+                        </div>
+
+                        <div class="forma-grupa">
+                            <label for="sport-galerija">Uploaduj slike za galeriju (možete odabrati više slika odjednom):</label>
+                            <input type="file" id="sport-galerija" accept="image/*" multiple>
+                        </div>
+
+                        <div class="forma-grupa">
+                            <label for="sport-pozicije-inicijalne">Pozicije za ovaj sport (odvojite zarezom):</label>
+                            <input type="text" id="sport-pozicije-inicijalne" required placeholder="npr. Napadač, Vezni, Golman">
+                        </div>
+
+                        <div class="forma-grupa">
+                            <label for="sport-opis">Kratki opis:</label>
+                            <textarea id="sport-opis" rows="3" required placeholder="Kratki opis..."></textarea>
+                        </div>
+
+                        <div class="forma-grupa">
+                            <label for="sport-savez">Detaljan opis:</label>
+                            <textarea id="sport-savez" rows="3" required placeholder="Detaljan opis..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-spasi">Sačuvaj sport</button>
+                    </form>
+            </section>
+
+            <section id="sekcija-sportista" class="admin-sekcija" style="display: none;">
+                <h2>Dodaj novog sportistu</h2>
+                <form id="forma-sportista">
+                    <input type="hidden" id="sportista-edit-originalno-ime" value="">
+                    <div class="forma-grupa">
+                        <label for="odabir-sporta">Izaberi matični sport:</label>
+                        <select id="odabir-sporta" required>
+                            <option value="" disabled selected>Izaberi matični sport...</option>
+                        </select>
+                    </div>
+
+                    <div class="forma-grupa">
+                        <label for="sportista-ime">Ime i prezime:</label>
+                        <input type="text" id="sportista-ime" required placeholder="npr. Damir Džumhur">
+                    </div>
+
+                    <div class="forma-grupa">
+                        <label for="sportista-uloga-select">Uloga / pozicija u timu:</label>
+                        <select id="sportista-uloga-select" required>
+                            <option value="" disabled selected>Prvo izaberite sport...</option>
+                        </select>
+                    </div>
+
+                    <div class="forma-grupa" id="grupa-nova-pozicija" style="display: none;">
+                        <label for="sportista-uloga-nova" style="color: #e67e22;">Unesite novu poziciju:</label>
+                        <input type="text" id="sportista-uloga-nova" placeholder="npr. Bek šuter">
+                    </div>
+
+                    <div class="forma-grupa">
+                        <label for="sportista-slika">Uploaduj sliku sportiste:</label>
+                        <input type="file" id="sportista-slika" accept="image/*" required>
+                    </div>
+
+                    <div class="forma-grupa">
+                        <label for="sportista-info">Biografija i najveći uspjesi:</label>
+                        <textarea id="sportista-info" rows="4" required placeholder="Napiši ključne uspjehe..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-spasi">Sačuvaj</button>
+                </form>
+            </section>
+
+            <section id="sekcija-upravljanje" class="admin-sekcija" style="display: none;">
+                <h2>Pregled i upravljanje podacima</h2>
+                <div id="lista-za-upravljanje"></div>
+            </section>
+
+        </div>
+    </main>
+    <footer id="kontakt"></footer>
+    <script src="./js/admin.js"></script>
+    <script src="./js/zajednicko.js"></script>
+</body>
+</html>

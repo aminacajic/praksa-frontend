@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/sport-detalji.css">
+    <title>Detalji o sportisti</title>
+</head>
+<body>
+    <header></header> 
+    <main>
+        <section class="sekcija-zaglavlje sportista-sekcija">
+            <div class="sport-detalji-kontejner">
+                
+                <div class="sport-galerija-slajder sportista-slajder-okvir">
+                    <div class="slajder-slika-okvir sportista-visina-okvira">
+                        <img id="sportista-velika-slika" src="./images/placeholder.png" alt="Slika sportiste" class="sportista-img">
+                    </div>
+                </div>
+
+                <div class="sport-tekst sportista-tekst-okvir">
+                    <h2 id="sportista-ime-prikaz">Učitavanje...</h2>
+                    <strong id="sportista-uloga-prikaz" class="sportista-uloga"></strong>
+                    
+                    <div class="sportista-biografija-kutija">
+                        <h4>Biografija i najveći uspjesi:</h4>
+                        <p id="sportista-biografija">Molimo sačekajte...</p>
+                    </div>
+
+                    <button onclick="window.history.back()" class="slajder-btn sportista-btn-nazad">&larr; Nazad</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="kontakt"></footer> 
+    <script src="./js/zajednicko.js"></script>
+    <script src="./js/sportista-detalj.js"></script>
+</body>
+</html>
