@@ -94,7 +94,7 @@ app.post('/api/spasi-sportistu', upload.single('slikaIgraca'), (req, res) => {
 
         fs.writeFile(jsonPutanja, JSON.stringify(sportovi, null, 2), 'utf8', (err) => {
             if (err) return res.status(500).json({ poruka: 'Greška pri upisu' });
-            res.json({ poruka: 'Uspješno sačuvan sportista! Nova pozicija je registrovana u sistemu.' });
+            res.json({ poruka: 'Uspješno sačuvan sportista!' });
         });
     });
 });

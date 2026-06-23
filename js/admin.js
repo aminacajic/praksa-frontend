@@ -209,43 +209,92 @@ document.addEventListener("DOMContentLoaded", () => {
         btnSpasiSportista.classList.remove("mod-izmjena-sportista");
     }
 
-    formaSport.addEventListener("submit", (e) => {
+   formaSport.addEventListener("submit", (e) => {
         e.preventDefault();
         const editId = document.getElementById("sport-edit-id").value;
         
-        const formData = new FormData(formaSport);
-        let url = '/api/dodaj-sport';
-        if(editId) {
-            url = `/api/uredi-sport/${editId}`;
+        const formData = new FormData();
+        
+        formData.append("id", document.getElementById("sport-id").value);
+        formData.append("naziv", document.getElementById("sport-naziv-unos").value);
+        formData.append("opis", document.getElementById("sport-opis").value);
+        formData.append("savez", document.getElementById("sport-savez").value);
+        
+        const pozicijeTekst = document.getElementById("sport-pozicije-inicijalne").value;
+        const pozicijeNiz = pozicijeTekst.split(",").map(p => p.trim()).filter(Boolean);
+        formData.append("pozicije", JSON.stringify(pozicijeNiz));
+
+        const slikaInput = document.getElementById("sport-slika");
+        if (slikaInput && slikaInput.files[0]) {
+            formData.append("slikaSporta", slikaInput.files[0]);
+        }
+
+        const galerijaInput = document.getElementById("sport-galerija");
+        if (galerijaInput && galerijaInput.files.length > 0) {
+            for (let i = 0; i < galerijaInput.files.length; i++) {
+                formData.append("galerijaSlike", galerijaInput.files[i]);
+            }
+        }
+
+        let url = '/api/spasi-sport';
+        if (editId) {
+            url = `/api/spasi-sport`; 
         }
 
         fetch(url, { method: 'POST', body: formData })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("Server je vratio grešku " + res.status);
+            return res.json();
+        })
         .then(odg => {
             alert(odg.poruka);
             resetujFormuSporta();
             btnUpravljanje.click(); 
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Greška pri spašavanju sporta: " + err.message);
         });
     });
 
-    formaSportista.addEventListener("submit", (e) => {
+  formaSportista.addEventListener("submit", (e) => {
         e.preventDefault();
         const originalnoIme = document.getElementById("sportista-edit-originalno-ime").value;
         const sportId = document.getElementById("odabir-sporta").value;
 
         const formData = new FormData(formaSportista);
+        
+        formData.append("sportId", sportId);
+        formData.append("ime", document.getElementById("sportista-ime").value);
+        formData.append("uloga", document.getElementById("sportista-uloga-select").value);
+        formData.append("info", document.getElementById("sportista-info").value);
+        formData.append("jeNovaPozicija", "false");
 
-        let url = '/api/dodaj-sportistu';
-        if(originalnoIme) {
-            url = `/api/uredi-sportistu/${sportId}/${encodeURIComponent(originalnoIme)}`;
+        const slikaInput = document.getElementById("sportista-slika");
+        if (slikaInput && slikaInput.files[0]) {
+            formData.append("slikaIgraca", slikaInput.files[0]);
+        }
+
+        let url = '/api/spasi-sportistu'; 
+        
+        if (originalnoIme) {
+            
+            url = '/api/spasi-sportistu'; 
         }
 
         fetch(url, { method: 'POST', body: formData })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("Server je vratio grešku " + res.status);
+            return res.json();
+        })
         .then(odg => {
             alert(odg.poruka);
             resetujFormuSportiste();
             btnUpravljanje.click(); 
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Greška: " + err.message);
         });
     });
 
