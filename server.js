@@ -58,43 +58,54 @@ app.post('/api/spasi-sport', konfiguracijaSportUploada, (req, res) => {
         sportovi.push(noviSport);
         fs.writeFile(jsonPutanja, JSON.stringify(sportovi, null, 2), 'utf8', (err) => {
             if (err) return res.status(500).json({ poruka: 'Greška pri upisu' });
-            res.json({ poruka: 'Novi sport i njegova galerija slika su uspješno sačuvani!' });
+            res.json({ poruka: 'Novi sport je uspješno sačuvan!' });
         });
     });
 });
 
 app.post('/api/spasi-sportistu', upload.single('slikaIgraca'), (req, res) => {
-    const { sportId, ime, uloga, info, jeNovaPozicija } = req.body;
+    const { sportId, ime, uloga, info, jeNovaPozicija, originalnoIme } = req.body;
     
-    if (!req.file) return res.status(400).json({ poruka: 'Greška: Nedostaje slika!' });
-
-    const noviSportista = {
-        ime: ime,
-        uloga: uloga,
-        info: info,
-        slika: `./images/${req.file.originalname}`
-    };
-
     fs.readFile(jsonPutanja, 'utf8', (err, data) => {
-        if (err) return res.status(500).json({ poruka: 'Greška pri čitanju' });
+        if (err) return res.status(500).json({ poruka: 'Greška pri čitanju baze podataka.' });
         let sportovi = JSON.parse(data);
 
         const sport = sportovi.find(s => s.id === sportId);
         if (!sport) return res.status(404).json({ poruka: 'Sport nije pronađen' });
 
-        if (jeNovaPozicija === "true") {
-            if (!sport.pozicije) sport.pozicije = [];
-            
-            if (!sport.pozicije.includes(uloga)) {
-                sport.pozicije.push(uloga);
-            }
+        const postojeciSportista = sport.sportisti.find(sp => sp.ime === originalnoIme || sp.ime === ime);
+
+        let putanjaSlike = '';
+        if (req.file) {
+            putanjaSlike = `./images/${req.file.originalname}`;
+        } else if (postojeciSportista) {
+            putanjaSlike = postojeciSportista.slika;
+        } else {
+            return res.status(400).json({ poruka: 'Greška: Morate uploadovati sliku za novog sportistu!' });
         }
 
-        sport.sportisti.push(noviSportista);
+        const podaciSportiste = {
+            ime: ime,
+            uloga: uloga,
+            info: info,
+            slika: putanjaSlike
+        };
+
+        if (jeNovaPozicija === "true") {
+            if (!sport.pozicije) sport.pozicije = [];
+            if (!sport.pozicije.includes(uloga)) sport.pozicije.push(uloga);
+        }
+
+        if (postojeciSportista) {
+            const indeks = sport.sportisti.findIndex(sp => sp.ime === originalnoIme || sp.ime === ime);
+            sport.sportisti[indeks] = podaciSportiste;
+        } else {
+            sport.sportisti.push(noviSportista);
+        }
 
         fs.writeFile(jsonPutanja, JSON.stringify(sportovi, null, 2), 'utf8', (err) => {
-            if (err) return res.status(500).json({ poruka: 'Greška pri upisu' });
-            res.json({ poruka: 'Uspješno sačuvan sportista!' });
+            if (err) return res.status(500).json({ poruka: 'Greška pri upisu u bazu.' });
+            res.json({ poruka: postojeciSportista ? 'Uspješno izmijenjen sportista!' : 'Uspješno sačuvan sportista!' });
         });
     });
 });

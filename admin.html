@@ -94,6 +94,11 @@
                         <input type="file" id="sportista-slika" accept="image/*" required>
                     </div>
 
+                      <div id="sportista-slika-prikaz-kontejner" style="margin-top: 10px; display: none; align-items: center; gap: 10px;">
+                        <img id="sportista-stara-slika-prikaz" src="" alt="Trenutna slika" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; cursor: pointer;">
+                        <span id="sportista-stara-slika-naziv" style="font-size: 13px; color: #555; font-style: italic;"></span>
+                    </div>
+
                     <div class="forma-grupa">
                         <label for="sportista-info">Biografija i najveći uspjesi:</label>
                         <textarea id="sportista-info" rows="4" required placeholder="Napiši ključne uspjehe..."></textarea>

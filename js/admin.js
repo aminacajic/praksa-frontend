@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
         [btnSport, btnSportista, btnUpravljanje].forEach(b => b?.classList.remove("aktivno"));
         [sekcijaSport, sekcijaSportista, sekcijaUpravljanje].forEach(s => { if(s) s.style.display = "none"; });
 
-        aktivnoDugme.classList.add("aktivno");
-        aktivnaSekcija.style.display = "block";
+        if(aktivnoDugme) aktivnoDugme.classList.add("aktivno");
+        if(aktivnaSekcija) aktivnaSekcija.style.display = "block";
     }
 
     btnSport.addEventListener("click", () => {
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function ucitajIisrtajUpravljanje() {
-        fetch('./data/podaci.json?t=' + new Date().getTime())
+        fetch('/data/podaci.json?t=' + new Date().getTime())
             .then(res => res.json())
             .then(podaci => {
                 kompletnaBaza = podaci;
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         aktivirajTab(btnSport, sekcijaSport);
     };
 
-    window.pokreniUredjivanjeSportiste = function(sportId, kodiranoIme) {
+window.pokreniUredjivanjeSportiste = function(sportId, kodiranoIme) {
         const ime = decodeURIComponent(kodiranoIme);
         const sport = kompletnaBaza.find(s => s.id === sportId);
         if(!sport) return;
@@ -164,6 +164,21 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("sportista-info").value = sp.info;
         document.getElementById("sportista-edit-originalno-ime").value = sp.ime;
         document.getElementById("sportista-slika").required = false;
+        
+        const kontejnerSlike = document.getElementById("sportista-slika-prikaz-kontejner");
+        const imgElement = document.getElementById("sportista-stara-slika-prikaz");
+        const nazivElement = document.getElementById("sportista-stara-slika-naziv");
+        
+        if (kontejnerSlike && imgElement && nazivElement) {
+            imgElement.src = sp.slika || './images/placeholder.png';
+            const nazivFajla = sp.slika ? sp.slika.split('/').pop() : 'Nema slike';
+            nazivElement.innerText = "Trenutna slika: " + nazivFajla;
+            
+            imgElement.title = `Trenutna slika: ${nazivFajla} (Biće iskorištena ako ne izaberete novu)`;
+            nazivElement.title = `Trenutna slika: ${nazivFajla} (Biće iskorištena ako ne izaberete novu)`;
+            
+            kontejnerSlike.style.display = "flex";
+        }
         
         btnSpasiSportista.innerText = "Sačuvaj izmjene";
         btnSpasiSportista.classList.add("mod-izmjena-sportista");
@@ -207,9 +222,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("sportista-slika").required = true;
         btnSpasiSportista.innerText = "Sačuvaj Sportistu";
         btnSpasiSportista.classList.remove("mod-izmjena-sportista");
+        const kontejnerSlike = document.getElementById("sportista-slika-prikaz-kontejner");
+        if (kontejnerSlike) kontejnerSlike.style.display = "none";
     }
 
-   formaSport.addEventListener("submit", (e) => {
+    formaSport.addEventListener("submit", (e) => {
         e.preventDefault();
         const editId = document.getElementById("sport-edit-id").value;
         
@@ -237,9 +254,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         let url = '/api/spasi-sport';
-        if (editId) {
-            url = `/api/spasi-sport`; 
-        }
 
         fetch(url, { method: 'POST', body: formData })
         .then(res => {
@@ -257,13 +271,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-  formaSportista.addEventListener("submit", (e) => {
+    formaSportista.addEventListener("submit", (e) => {
         e.preventDefault();
         const originalnoIme = document.getElementById("sportista-edit-originalno-ime").value;
         const sportId = document.getElementById("odabir-sporta").value;
 
-        const formData = new FormData(formaSportista);
+        const formData = new FormData();
         
+        formData.append("originalnoIme", originalnoIme);
         formData.append("sportId", sportId);
         formData.append("ime", document.getElementById("sportista-ime").value);
         formData.append("uloga", document.getElementById("sportista-uloga-select").value);
@@ -276,11 +291,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         let url = '/api/spasi-sportistu'; 
-        
-        if (originalnoIme) {
-            
-            url = '/api/spasi-sportistu'; 
-        }
 
         fetch(url, { method: 'POST', body: formData })
         .then(res => {
@@ -315,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    fetch('./data/podaci.json?t=' + new Date().getTime())
+    fetch('/data/podaci.json?t=' + new Date().getTime())
         .then(res => res.json())
         .then(podaci => { 
             kompletnaBaza = podaci; 
