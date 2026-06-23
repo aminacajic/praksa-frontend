@@ -37,6 +37,11 @@
                             <input type="file" id="sport-slika" accept="image/*" required>
                         </div>
 
+                        <div id="sport-slika-prikaz-kontejner" style="margin-top: 10px; display: none; align-items: center; gap: 10px;">
+                            <img id="sport-stara-slika-prikaz" src="" alt="Trenutna slika" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; cursor: pointer;">
+                            <span id="sport-stara-slika-naziv" style="font-size: 13px; color: #555; font-style: italic;"></span>
+                        </div>
+
                         <div class="forma-grupa">
                             <label for="sport-galerija">Uploaduj slike za galeriju (možete odabrati više slika odjednom):</label>
                             <input type="file" id="sport-galerija" accept="image/*" multiple>

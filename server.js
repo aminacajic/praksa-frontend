@@ -25,44 +25,53 @@ const konfiguracijaSportUploada = upload.fields([
 app.post('/api/spasi-sport', konfiguracijaSportUploada, (req, res) => {
     const { id, naziv, opis, savez, pozicije } = req.body;
 
-    if (!req.files || !req.files['slikaSporta']) {
-        return res.status(400).json({ poruka: 'Greška: Glavna slika sporta fali!' });
-    }
-
-    const glavnaSlikaFajl = req.files['slikaSporta'][0];
-    
-    let nizPutanjaGalerije = [];
-    if (req.files['galerijaSlike']) {
-        nizPutanjaGalerije = req.files['galerijaSlike'].map(fajl => `./images/${fajl.originalname}`);
-    }
-
-    const noviSport = {
-        id: id,
-        naziv: naziv,
-        slika: `./images/${glavnaSlikaFajl.originalname}`,
-        galerija: nizPutanjaGalerije, 
-        opis: opis,
-        savez: savez,
-        pozicije: JSON.parse(pozicije), 
-        sportisti: []
-    };
-
     fs.readFile(jsonPutanja, 'utf8', (err, data) => {
-        if (err) return res.status(500).json({ poruka: 'Greška pri čitanju' });
+        if (err) return res.status(500).json({ poruka: 'Greška pri čitanju baze.' });
         let sportovi = JSON.parse(data);
 
-        if (sportovi.some(s => s.id === noviSport.id)) {
-            return res.status(400).json({ poruka: 'Sport već postoji!' });
+        const postojeciSport = sportovi.find(s => s.id === id);
+
+        let putanjaGlavneSlike = postojeciSport ? postojeciSport.slika : '';
+        if (req.files && req.files['slikaSporta']) {
+            putanjaGlavneSlike = `./images/${req.files['slikaSporta'][0].originalname}`;
+        } else if (!postojeciSport) {
+            return res.status(400).json({ poruka: 'Greška: Glavna slika sporta fali za novi sport!' });
         }
 
-        sportovi.push(noviSport);
+        let nizPutanjaGalerije = postojeciSport ? (postojeciSport.galerija || []) : [];
+        if (req.files && req.files['galerijaSlike']) {
+            nizPutanjaGalerije = req.files['galerijaSlike'].map(fajl => `./images/${fajl.originalname}`);
+        }
+
+        const podaciSporta = {
+            id: id,
+            naziv: naziv,
+            slika: putanjaGlavneSlike,
+            galerija: nizPutanjaGalerije, 
+            opis: opis,
+            savez: savez,
+            pozicije: JSON.parse(pozicije),
+            sportisti: postojeciSport ? postojeciSport.sportisti : [] // Čuvamo postojeće sportiste!
+        };
+
+        if (postojeciSport) {
+            const indeks = sportovi.findIndex(s => s.id === id);
+            sportovi[indeks] = podaciSporta;
+        } else {
+            sportovi.push(podaciSporta);
+        }
+
         fs.writeFile(jsonPutanja, JSON.stringify(sportovi, null, 2), 'utf8', (err) => {
+<<<<<<< HEAD
             if (err) return res.status(500).json({ poruka: 'Greška pri upisu' });
             res.json({ poruka: 'Novi sport je uspješno sačuvan!' });
+=======
+            if (err) return res.status(500).json({ poruka: 'Greška pri upisu u bazu.' });
+            res.json({ poruka: postojeciSport ? 'Sport uspješno izmijenjen!' : 'Novi sport uspješno sačuvan!' });
+>>>>>>> ea5293a (Prepravljeno uređivanje sportiste)
         });
     });
 });
-
 app.post('/api/spasi-sportistu', upload.single('slikaIgraca'), (req, res) => {
     const { sportId, ime, uloga, info, jeNovaPozicija, originalnoIme } = req.body;
     

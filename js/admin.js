@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    window.pokreniUredjivanjeSporta = function(sportId) {
+window.pokreniUredjivanjeSporta = function(sportId) {
         const sport = kompletnaBaza.find(s => s.id === sportId);
         if(!sport) return;
         document.getElementById("sport-id").value = sport.id;
@@ -142,8 +142,31 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("sport-opis").value = sport.opis || "";
         document.getElementById("sport-savez").value = sport.savez || "";
         document.getElementById("sport-edit-id").value = sport.id;
-        document.getElementById("sport-slika").required = false;
+        document.getElementById("sport-slika").required = false; // Slika nije obavezna pri izmjeni
         
+        // POPRAVKA POZICIJA: Pretvaramo niz pozicija nazad u tekst odvojen zarezima da se prikaže u formi
+        if (sport.pozicije && Array.isArray(sport.pozicije)) {
+            document.getElementById("sport-pozicije-inicijalne").value = sport.pozicije.join(", ");
+        } else {
+            document.getElementById("sport-pozicije-inicijalne").value = sport.pozicije || "";
+        }
+
+        // NOVO: Prikazivanje stare slike sporta na formi
+        const kontejnerSlike = document.getElementById("sport-slika-prikaz-kontejner");
+        const imgElement = document.getElementById("sport-stara-slika-prikaz");
+        const nazivElement = document.getElementById("sport-stara-slika-naziv");
+        
+        if (kontejnerSlike && imgElement && nazivElement) {
+            imgElement.src = sport.slika || './images/placeholder.png';
+            const nazivFajla = sport.slika ? sport.slika.split('/').pop() : 'Nema slike';
+            nazivElement.innerText = "Trenutna slika: " + nazivFajla;
+            
+            imgElement.title = `Trenutna slika: ${nazivFajla} (Zadržava se ako ne odaberete novu)`;
+            nazivElement.title = `Trenutna slika: ${nazivFajla} (Zadržava se ako ne odaberete novu)`;
+            
+            kontejnerSlike.style.display = "flex";
+        }
+
         btnSpasiSport.innerText = "Sačuvaj izmjene";
         btnSpasiSport.classList.add("mod-izmjena-sport");
 
@@ -206,14 +229,15 @@ window.pokreniUredjivanjeSportiste = function(sportId, kodiranoIme) {
             });
         }
     }
-
-    function resetujFormuSporta() {
+            function resetujFormuSporta() {
         formaSport.reset();
         document.getElementById("sport-id").disabled = false;
         document.getElementById("sport-edit-id").value = "";
         document.getElementById("sport-slika").required = true;
         btnSpasiSport.innerText = "Sačuvaj Sport";
         btnSpasiSport.classList.remove("mod-izmjena-sport");
+        const kontejnerSlike = document.getElementById("sport-slika-prikaz-kontejner");
+        if (kontejnerSlike) kontejnerSlike.style.display = "none";
     }
 
     function resetujFormuSportiste() {
