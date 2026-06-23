@@ -62,13 +62,9 @@ app.post('/api/spasi-sport', konfiguracijaSportUploada, (req, res) => {
         }
 
         fs.writeFile(jsonPutanja, JSON.stringify(sportovi, null, 2), 'utf8', (err) => {
-<<<<<<< HEAD
-            if (err) return res.status(500).json({ poruka: 'Greška pri upisu' });
-            res.json({ poruka: 'Novi sport je uspješno sačuvan!' });
-=======
+
             if (err) return res.status(500).json({ poruka: 'Greška pri upisu u bazu.' });
             res.json({ poruka: postojeciSport ? 'Sport uspješno izmijenjen!' : 'Novi sport uspješno sačuvan!' });
->>>>>>> ea5293a (Prepravljeno uređivanje sportiste)
         });
     });
 });
@@ -109,7 +105,7 @@ app.post('/api/spasi-sportistu', upload.single('slikaIgraca'), (req, res) => {
             const indeks = sport.sportisti.findIndex(sp => sp.ime === originalnoIme || sp.ime === ime);
             sport.sportisti[indeks] = podaciSportiste;
         } else {
-            sport.sportisti.push(noviSportista);
+            sport.sportisti.push(podaciSportiste); 
         }
 
         fs.writeFile(jsonPutanja, JSON.stringify(sportovi, null, 2), 'utf8', (err) => {

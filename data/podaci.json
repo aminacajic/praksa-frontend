@@ -7,7 +7,7 @@
       "./images/galerija_nogomet_1.jpg",
       "./images/galerija_nogomet_2.jpg"
     ],
-    "opis": "Krovna kuća bh. fudbala - Nogometni/Fudbalski savez BiH!",
+    "opis": "Krovna kuća bh. fudbala - Nogometni/Fudbalski savez BiH.",
     "savez": "Nogometni/Fudbalski savez BiH (NFSBiH) osnovan je 1992. godine. Najveći uspjeh reprezentacije je plasman na Svjetsko prvenstvo u Brazilu 2014. godine.",
     "pozicije": [
       "Napadač / Kapiten",
@@ -19,7 +19,7 @@
       {
         "ime": "Edin Džeko",
         "uloga": "Napadač / Kapiten",
-        "info": "Najbolji strijelac u historiji reprezentacije BiH!\r\n1",
+        "info": "Najbolji strijelac u historiji reprezentacije BiH!",
         "slika": "./images/dzeko.jpg"
       },
       {
@@ -116,6 +116,12 @@
         "uloga": "Primač",
         "info": "Dugogodišnja kapitenka i jedna od najboljih odbojkašica u regiji.",
         "slika": "./images/begic.png"
+      },
+      {
+        "ime": "Elena Babić",
+        "uloga": "Korektor",
+        "info": "odb",
+        "slika": "./images/babic.png"
       }
     ]
   }
