@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let slikeZaSlajder = [];
     let trenutniIndeks = 0;
+    
+    let sviSportistiIzSporta = [];
+    const searchSportistiInput = document.getElementById("search-sportisti-input");
 
     const slikaElement = document.getElementById("slajder-trenutna-slika");
     const btnNazad = document.getElementById("slajder-nazad");
@@ -32,9 +35,57 @@ document.addEventListener("DOMContentLoaded", () => {
         trenutniIndeks = trenutniIndeks === slikeZaSlajder.length - 1 ? 0 : trenutniIndeks + 1; 
         prikaziSliku(trenutniIndeks); 
     });
+    function prikaziSportiste(sportisti) {
+        const sportistiGrid = document.getElementById("sportisti-grid");
+        if (!sportistiGrid) return;
+        sportistiGrid.innerHTML = "";
 
+        if (sportisti.length === 0) {
+            sportistiGrid.innerHTML = "<p class='nema-rezultata-poruka'>Nema pronađenih sportista za vašu pretragu.</p>";
+            return;
+        }
+        /*
+        sportisti.forEach(sportista => {
+            const slikaIgraca = sportista.slika || "./images/placeholder.png";
+
+            const kartica = `
+                <div class="ponuda-kartica sportista-detalji-kartica" 
+                     onclick="window.location.href='sportista.html?sportId=${sportId}&ime=${encodeURIComponent(sportista.ime)}'">
+                    <div class="sportista-slika-okvir-kartice">
+                        <img src="${slikaIgraca}" alt="${sportista.ime}" class="sportista-slika-kartice">
+                    </div>
+                    <div class="sportista-sadrzaj-kartice">
+                        <h3>${sportista.ime}</h3>
+                        <strong>${sportista.uloga}</strong>
+                        <p>${sportista.info || ""}</p>
+                    </div>
+                </div>
+            `;
+            sportistiGrid.innerHTML += kartica;
+        });
+        */
+        if (sportisti && sportisti.length > 0) {
+            const nizHtmlKartica = sportisti.map(sportista => { 
+                const slikaIgraca = sportista.slika || "./images/placeholder.png";
+                return `
+                    <div class="ponuda-kartica sportista-detalji-kartica" 
+                        onclick="window.location.href='sportista.html?sportId=${sportId}&ime=${encodeURIComponent(sportista.ime)}'">
+                        <div class="sportista-slika-okvir-kartice">
+                            <img src="${slikaIgraca}" alt="${sportista.ime}" class="sportista-slika-kartice">
+                        </div>
+                        <div class="sportista-sadrzaj-kartice">
+                            <h3>${sportista.ime}</h3>
+                            <strong>${sportista.uloga}</strong>
+                            <p>${sportista.info || ""}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            sportistiGrid.innerHTML = nizHtmlKartica.join(''); 
+        }
+    }
     function ucitajPodatke() {
-        fetch('./js/podaci.json?t=' + new Date().getTime())
+        fetch('./data/podaci.json?t=' + new Date().getTime())
             .then(res => res.json())
             .then(sportovi => {
                 const lokalniSport = sportovi.find(s => s.id === sportId);
@@ -54,38 +105,29 @@ document.addEventListener("DOMContentLoaded", () => {
                     btnNaprijed.style.display = "none";
                 }
 
-                const sportistiGrid = document.getElementById("sportisti-grid");
-                sportistiGrid.innerHTML = "";
-
-                if (lokalniSport.sportisti && lokalniSport.sportisti.length > 0) {
-                    lokalniSport.sportisti.forEach(sportista => {
-                        const slikaIgraca = sportista.slika || "./images/placeholder.png";
-
-                        const kartica = `
-                            <div class="ponuda-kartica" style="padding: 20px; border-radius: 6px; display: flex; flex-direction: column; gap: 15px; cursor: pointer;" 
-                                 onclick="window.location.href='sportista.html?sportId=${sportId}&ime=${encodeURIComponent(sportista.ime)}'">
-                                <div class="kartica-slika-wrapper" style="height: 220px; width: 100%; overflow: hidden; border-radius: 4px; background-color: #f8fafc;">
-                                    <img src="${slikaIgraca}" alt="${sportista.ime}" class="kartica-slika" style="width: 100%; height: 100%; object-fit: contain;">
-                                </div>
-                                <div class="kartica-sadrzaj" style="padding: 0;">
-                                    <h3 style="margin: 0 0 5px 0;">${sportista.ime}</h3>
-                                    <strong style="color: #a3c6a8; font-size: 14px; display: block; margin-bottom: 10px;">${sportista.uloga}</strong>
-                                    <p style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${sportista.info}</p>
-                                </div>
-                            </div>
-                        `;
-                        sportistiGrid.innerHTML += kartica;
-                    });
-                } else {
-                    sportistiGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #666;'>Trenutno nema unesenih sportista za ovaj sport.</p>";
-                }
+                sviSportistiIzSporta = lokalniSport.sportisti || [];
+                prikaziSportiste(sviSportistiIzSporta);
             });
+    }
+
+    if (searchSportistiInput) {
+        searchSportistiInput.addEventListener("input", (event) => {
+            const pojam = event.target.value.toLowerCase();
+            const filtriraniSportisti = sviSportistiIzSporta.filter(sportista => 
+                sportista.ime.toLowerCase().includes(pojam) || 
+                (sportista.uloga && sportista.uloga.toLowerCase().includes(pojam))
+            );
+
+            prikaziSportiste(filtriraniSportisti);
+        });
     }
 
     function prikazGreske() {
         document.getElementById("sport-naziv").innerText = "Sport nije pronađen";
         document.getElementById("sport-savez-info").innerText = "Traženi sport ne postoji u bazi.";
+        const grid = document.getElementById("sportisti-grid");
+        if(grid) grid.innerHTML = "";
     }
-
+    
     ucitajPodatke();
 });

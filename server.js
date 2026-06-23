@@ -9,7 +9,7 @@ const PORT = 3000;
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const jsonPutanja = path.join(__dirname, 'js', 'podaci.json');
+const jsonPutanja = path.join(__dirname, 'data', 'podaci.json');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) { cb(null, 'images/'); },

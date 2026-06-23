@@ -2,15 +2,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnSport = document.getElementById("btn-prikazi-sport");
     const btnSportista = document.getElementById("btn-prikazi-sportistu");
     const btnUpravljanje = document.getElementById("btn-prikazi-upravljanje");
-
     const sekcijaSport = document.getElementById("sekcija-sport");
     const sekcijaSportista = document.getElementById("sekcija-sportista");
     const sekcijaUpravljanje = document.getElementById("sekcija-upravljanje");
-
     const formaSport = document.getElementById("forma-sport");
     const formaSportista = document.getElementById("forma-sportista");
     const btnSpasiSport = document.getElementById("btn-spasi-sport") || document.querySelector("#forma-sport .btn-spasi");
     const btnSpasiSportista = document.getElementById("btn-spasi-sportistu") || document.querySelector("#forma-sportista .btn-spasi");
+    const adminSearchInput = document.getElementById("admin-search-input");
 
     let kompletnaBaza = [];
 
@@ -31,9 +30,70 @@ document.addEventListener("DOMContentLoaded", () => {
         aktivirajTab(btnSportista, sekcijaSportista);
     });
     btnUpravljanje.addEventListener("click", () => {
+        if (adminSearchInput) adminSearchInput.value = "";
         ucitajIisrtajUpravljanje();
         aktivirajTab(btnUpravljanje, sekcijaUpravljanje);
     });
+
+    function iscrtajUpravljanjePanel(podaci) {
+        const kontejner = document.getElementById("lista-za-upravljanje");
+        if (!kontejner) return;
+        kontejner.innerHTML = "";
+
+        if (podaci.length === 0) {
+            kontejner.innerHTML = `<p class="nema-rezultata-poruka">Nema rezultata za vašu pretragu u administraciji.</p>`;
+            return;
+        }
+
+        podaci.forEach(sport => {
+            let sportistaHtml = "";
+            if(sport.sportisti && sport.sportisti.length > 0) {
+                const pojam = adminSearchInput ? adminSearchInput.value.toLowerCase() : "";
+                
+                sport.sportisti.forEach(sp => {
+                    const poklapaSeSportista = sp.ime.toLowerCase().includes(pojam) || 
+                                              (sp.uloga && sp.uloga.toLowerCase().includes(pojam));
+                    const poklapaSeMaticniSport = sport.naziv.toLowerCase().includes(pojam);
+
+                    if (poklapaSeSportista || poklapaSeMaticniSport || !pojam) {
+                        sportistaHtml += `
+                            <div class="upravljanje-red">
+                                <div class="upravljanje-info">
+                                    <img class="upravljanje-mini-slika" src="${sp.slika || './images/placeholder.png'}">
+                                    <div>
+                                        <strong>${sp.ime}</strong> <small>(${sp.uloga})</small>
+                                    </div>
+                                </div>
+                                <div class="upravljanje-akcije">
+                                    <button class="btn-uredi" onclick="pokreniUredjivanjeSportiste('${sport.id}', '${encodeURIComponent(sp.ime)}')">Uredi</button>
+                                    <button class="btn-obrisi" onclick="obrisiSportistu('${sport.id}', '${encodeURIComponent(sp.ime)}')">Obriši</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            const sportBlok = `
+                <div class="upravljanje-sport-blok">
+                    <div class="upravljanje-red upravljanje-zaglavlje-bloka">
+                        <div class="upravljanje-info">
+                            <img class="upravljanje-mini-slika slika-obla" src="${sport.slika || './images/placeholder.png'}">
+                            <h3>${sport.naziv} (ID: ${sport.id})</h3>
+                        </div>
+                        <div class="upravljanje-akcije">
+                            <button class="btn-uredi" onclick="pokreniUredjivanjeSporta('${sport.id}')">Uredi sport</button>
+                            <button class="btn-obrisi" onclick="obrisiSport('${sport.id}')">Obriši sport</button>
+                        </div>
+                    </div>
+                    <div class="upravljanje-sportisti-lista">
+                        ${sportistaHtml || '<p style="color: #888; font-size:13px;">Nema unesenih ili pronađenih sportista.</p>'}
+                    </div>
+                </div>
+            `;
+            kontejner.innerHTML += sportBlok;
+        });
+    }
 
     function ucitajIisrtajUpravljanje() {
         fetch('./js/podaci.json?t=' + new Date().getTime())
@@ -41,51 +101,27 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(podaci => {
                 kompletnaBaza = podaci;
                 osvjeziSelektoreSportova();
-                
-                const kontejner = document.getElementById("lista-za-upravljanje");
-                kontejner.innerHTML = "";
-
-                podaci.forEach(sport => {
-                    let sportistaHtml = "";
-                    if(sport.sportisti && sport.sportisti.length > 0) {
-                        sport.sportisti.forEach(sp => {
-                            sportistaHtml += `
-                                <div class="upravljanje-red">
-                                    <div class="upravljanje-info">
-                                        <img class="upravljanje-mini-slika" src="${sp.slika || './images/placeholder.png'}">
-                                        <div>
-                                            <strong>${sp.ime}</strong> <small>(${sp.uloga})</small>
-                                        </div>
-                                    </div>
-                                    <div class="upravljanje-akcije">
-                                        <button class="btn-uredi" onclick="pokreniUredjivanjeSportiste('${sport.id}', '${encodeURIComponent(sp.ime)}')">Uredi</button>
-                                        <button class="btn-obrisi" onclick="obrisiSportistu('${sport.id}', '${encodeURIComponent(sp.ime)}')">Obriši</button>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-
-                    const sportBlok = `
-                        <div class="upravljanje-sport-blok">
-                            <div class="upravljanje-red upravljanje-zaglavlje-bloka">
-                                <div class="upravljanje-info">
-                                    <img class="upravljanje-mini-slika slika-obla" src="${sport.slika || './images/placeholder.png'}">
-                                    <h3>${sport.naziv} (ID: ${sport.id})</h3>
-                                </div>
-                                <div class="upravljanje-akcije">
-                                    <button class="btn-uredi" onclick="pokreniUredjivanjeSporta('${sport.id}')">Uredi sport</button>
-                                    <button class="btn-obrisi" onclick="obrisiSport('${sport.id}')">Obriši sport</button>
-                                </div>
-                            </div>
-                            <div class="upravljanje-sportisti-lista">
-                                ${sportistaHtml || '<p style="color: #888; font-size:13px;">Nema unesenih sportista.</p>'}
-                            </div>
-                        </div>
-                    `;
-                    kontejner.innerHTML += sportBlok;
-                });
+                iscrtajUpravljanjePanel(kompletnaBaza);
             });
+    }
+
+    if (adminSearchInput) {
+        adminSearchInput.addEventListener("input", (event) => {
+            const pojam = event.target.value.toLowerCase();
+
+            const filtriraniPodaci = kompletnaBaza.filter(sport => {
+                const poklapaSeSport = sport.naziv.toLowerCase().includes(pojam);
+
+                const poklapaSeSportista = sport.sportisti && sport.sportisti.some(sp => 
+                    sp.ime.toLowerCase().includes(pojam) || 
+                    (sp.uloga && sp.uloga.toLowerCase().includes(pojam))
+                );
+
+                return poklapaSeSport || poklapaSeSportista;
+            });
+
+            iscrtajUpravljanjePanel(filtriraniPodaci);
+        });
     }
 
     function osvjeziSelektoreSportova() {
@@ -146,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(!ulogaSelect) return;
         ulogaSelect.innerHTML = '<option value="" disabled selected>Izaberi poziciju...</option>';
         
-        const sport = kompletBaza.find(s => s.id === sportId);
+        const sport = kompletnaBaza.find(s => s.id === sportId);
         if(sport && sport.pozicije) {
             const pozicijeNiz = Array.isArray(sport.pozicije) ? sport.pozicije : sport.pozicije.split(",").map(p => p.trim());
             pozicijeNiz.forEach(p => {

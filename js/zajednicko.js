@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <ul>
                     <li><a href="index.html">Početna</a></li>
                     <li><a href="index.html#sportisti">Sportovi</a></li>
+                    <li><a href="vijesti.html">Vijesti</a></li> 
                     <li><a href="#kontakt">Kontakt</a></li>
                     <li><a href="admin.html">Admin</a></li>
                 </ul>

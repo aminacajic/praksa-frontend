@@ -244,6 +244,75 @@ footer ul {
     }
 }
 
+.pretraga-input {
+    margin-top: 16px;
+    padding: 10px 16px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pretraga-input:focus {
+    border-color: #a3c6a8;
+    box-shadow: 0 0 0 3px rgba(163, 198, 168, 0.2);
+}
+
+.nema-rezultata-poruka {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #666666;
+    font-size: 16px;
+    margin-top: 20px;
+}
+   
+.sekcija-zaglavlje-vijesti {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.sekcija-zaglavlje-vijesti p {
+    color: #666666;
+    margin-top: 5px;
+}
+
+.učitavanje-poruka {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #888888;
+}
+
+.vijesti-slika-okvir {
+    height: 200px;
+    overflow: hidden;
+}
+
+.vijesti-sadrzaj {
+    padding: 15px;
+}
+
+.vijesti-naslov {
+    text-transform: capitalize;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.vijesti-tekst {
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.vijesti-izvor {
+    color: #94a3b8;
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
 @media (max-width: 650px) {
     .ponuda-grid {
         grid-template-columns: 1fr;

@@ -128,9 +128,62 @@
     transform: none;
 }
 
+.sekcija-zaglavlje-sportisti {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
 .sekcija-zaglavlje.sportista-sekcija {
     padding: 0 20px;
     box-sizing: border-box;
+}
+
+.sportista-detalji-kartica {
+    padding: 20px; 
+    border-radius: 6px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    cursor: pointer;
+}
+
+.sportista-slika-okvir-kartice {
+    height: 220px; 
+    width: 100%; 
+    overflow: hidden; 
+    border-radius: 4px; 
+    background-color: #f8fafc;
+}
+
+.sportista-slika-kartice {
+    width: 100%; 
+    height: 100%; 
+    object-fit: contain;
+}
+
+.sportista-sadrzaj-kartice {
+    padding: 0;
+}
+
+.sportista-sadrzaj-kartice h3 {
+    margin: 0 0 5px 0;
+}
+
+.sportista-sadrzaj-kartice strong {
+    color: #a3c6a8; 
+    font-size: 14px; 
+    display: block; 
+    margin-bottom: 10px;
+}
+
+.sportista-sadrzaj-kartice p {
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {

@@ -18,7 +18,7 @@
                 <button type="button" id="btn-prikazi-sportistu" class="btn-izbor">Novi sportista</button>
                 <button type="button" id="btn-prikazi-upravljanje" class="btn-izbor">Uređivanje</button>
             </div>
-            <section id="sekcija-sport" class="admin-sekcija">
+            <section id="sekcija-sport" class="admin-sekcija" style="display: none;">
                 <h2>Dodaj novi sport</h2>
                     <form id="forma-sport">
                         <input type="hidden" id="sport-edit-id" value="">
@@ -105,6 +105,14 @@
 
             <section id="sekcija-upravljanje" class="admin-sekcija" style="display: none;">
                 <h2>Pregled i upravljanje podacima</h2>
+                <div style="margin-bottom: 20px;">
+                    <input 
+                        type="text" 
+                        id="admin-search-input" 
+                        class="pretraga-input" 
+                        placeholder="Pretraži po sportu ili sportisti..."
+                    >
+                </div>
                 <div id="lista-za-upravljanje"></div>
             </section>
 
