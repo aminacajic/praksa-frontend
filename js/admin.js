@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function ucitajIisrtajUpravljanje() {
-        fetch('./js/podaci.json?t=' + new Date().getTime())
+        fetch('./data/podaci.json?t=' + new Date().getTime())
             .then(res => res.json())
             .then(podaci => {
                 kompletnaBaza = podaci;
@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    fetch('./js/podaci.json?t=' + new Date().getTime())
+    fetch('./data/podaci.json?t=' + new Date().getTime())
         .then(res => res.json())
         .then(podaci => { 
             kompletnaBaza = podaci; 
