@@ -1,0 +1,99 @@
+import { useState } from "react";
+import { useSportoviData } from "../hooks/useSportoviData.js";
+import AdminFormaSport from "./admin/AdminFormaSport.jsx";
+import AdminFormaSportista from "./admin/AdminFormaSportista.jsx";
+import AdminUpravljanje from "./admin/AdminUpravljanje.jsx";
+
+export default function Admin() {
+  const { sportovi, ucitavanje, ponovoUcitaj } = useSportoviData();
+
+  const [tab, setTab] = useState("sport"); 
+  const [sportZaIzmjenu, setSportZaIzmjenu] = useState(null);
+  const [sportistaZaIzmjenu, setSportistaZaIzmjenu] = useState(null);
+
+  function otvoriNoviSport() {
+    setSportZaIzmjenu(null);
+    setTab("sport");
+  }
+
+  function otvoriNovogSportistu() {
+    setSportistaZaIzmjenu(null);
+    setTab("sportista");
+  }
+
+  function otvoriUpravljanje() {
+    setTab("upravljanje");
+  }
+
+  function urediSport(sport) {
+    setSportZaIzmjenu(sport);
+    setTab("sport");
+  }
+
+  function urediSportistu(sportId, sportista) {
+    setSportistaZaIzmjenu({ ...sportista, sportId });
+    setTab("sportista");
+  }
+
+  function naUspjeh() {
+    ponovoUcitaj();
+    setSportZaIzmjenu(null);
+    setSportistaZaIzmjenu(null);
+    setTab("upravljanje");
+  }
+
+  return (
+    <>
+      <div className="admin-kontejner">
+        <div className="odabir-akcije">
+          <p>Šta želite raditi u bazi podataka?</p>
+          <button type="button" className={`btn-izbor ${tab === "sport" ? "aktivno" : ""}`} onClick={otvoriNoviSport}>
+            Novi sport
+          </button>
+          <button
+            type="button"
+            className={`btn-izbor ${tab === "sportista" ? "aktivno" : ""}`}
+            onClick={otvoriNovogSportistu}
+          >
+            Novi sportista
+          </button>
+          <button
+            type="button"
+            className={`btn-izbor ${tab === "upravljanje" ? "aktivno" : ""}`}
+            onClick={otvoriUpravljanje}
+          >
+            Uređivanje
+          </button>
+        </div>
+
+        {ucitavanje ? (
+          <p className="učitavanje-poruka">Učitavanje podataka...</p>
+        ) : (
+          <>
+            {tab === "sport" && (
+              <AdminFormaSport key={sportZaIzmjenu?.id || "novi-sport"} sportZaIzmjenu={sportZaIzmjenu} onUspjeh={naUspjeh} />
+            )}
+
+            {tab === "sportista" && (
+              <AdminFormaSportista
+                key={sportistaZaIzmjenu ? `${sportistaZaIzmjenu.sportId}-${sportistaZaIzmjenu.ime}` : "novi-sportista"}
+                sportovi={sportovi}
+                sportistaZaIzmjenu={sportistaZaIzmjenu}
+                onUspjeh={naUspjeh}
+              />
+            )}
+
+            {tab === "upravljanje" && (
+              <AdminUpravljanje
+                sportovi={sportovi}
+                onUrediSport={urediSport}
+                onUrediSportistu={urediSportistu}
+                onPromjena={ponovoUcitaj}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </>
+  );
+}

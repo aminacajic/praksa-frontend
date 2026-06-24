@@ -1,0 +1,262 @@
+header {
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: var(--boja-tamno-zelena);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3vw;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(26, 51, 34, 0.15);
+}
+
+header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.klik-naslov {
+  font-size: clamp(14px, 2vw, 20px);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  margin: 0;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: clamp(2px, 1vw, 6px);
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: var(--boja-tamno-zelena);
+  font-size: clamp(11px, 1.5vw, 14px);
+  padding: 8px clamp(6px, 1.2vw, 16px);
+  font-weight: 400;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+nav a:hover,
+nav a.aktivna-ruta {
+  color: var(--boja-kadulja);
+  background: rgba(26, 51, 34, 0.05);
+}
+
+
+footer {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--boja-tamno-plava-podnozje);
+  color: #ffffff;
+  padding: 40px;
+  margin-top: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+footer h3 {
+  font-size: 16px;
+  margin-top: 0;
+  font-weight: normal;
+}
+
+footer ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hero {
+  max-width: 1200px;
+  margin: 0 auto 60px auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
+  align-items: center;
+  min-height: 550px;
+}
+
+.hero-image-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero-slika {
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  object-fit: contain;
+  background-color: var(--boja-pozadina);
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-title {
+  font-family: var(--font-naslov);
+  font-size: 64px;
+  line-height: 1.15;
+  font-weight: 400;
+  color: var(--boja-tamno-zelena);
+  margin: 0 0 25px 0;
+}
+
+.hero-title::first-letter {
+  text-transform: uppercase;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--boja-podnaslov);
+  max-width: 440px;
+  margin: 0 0 40px 0;
+}
+
+#sportisti {
+  scroll-margin-top: 80px;
+}
+
+.ponuda-sekcija {
+  padding: 40px 0;
+}
+
+.sekcija-zaglavlje {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.sekcija-zaglavlje h2 {
+  font-family: var(--font-naslov);
+  font-size: 32px;
+  color: var(--boja-tamno-zelena);
+  margin: 0 0 10px 0;
+}
+
+.sekcija-zaglavlje-vijesti {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.sekcija-zaglavlje-vijesti h2 {
+  font-family: var(--font-naslov);
+  font-size: 32px;
+  color: var(--boja-tamno-zelena);
+  margin: 0;
+}
+
+.ponuda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  width: 100%;
+}
+
+.ponuda-kartica {
+  background-color: #ffffff;
+  border: 1px solid var(--boja-ivica);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.ponuda-kartica.klikabilna {
+  cursor: pointer;
+}
+
+.ponuda-kartica.klikabilna:hover {
+  box-shadow: 0 8px 20px rgba(26, 51, 34, 0.1);
+  transform: translateY(-3px);
+}
+
+.kartica-slika-wrapper {
+  width: 100%;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.kartica-slika {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.kartica-sadrzaj {
+  padding: 20px;
+}
+
+.kartica-sadrzaj h3 {
+  font-family: var(--font-naslov);
+  font-size: 20px;
+  color: var(--boja-tamno-zelena);
+  margin: 0 0 10px 0;
+}
+
+.kartica-sadrzaj p {
+  font-size: 14px;
+  color: var(--boja-tekst-siva-2);
+  margin: 0;
+}
+
+.kartica-napomena {
+  color: var(--boja-kadulja);
+  font-weight: 600;
+  display: block;
+  margin-top: 8px;
+}
+
+@media (max-width: 992px) {
+  .ponuda-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    min-height: auto;
+    padding-top: 30px;
+  }
+  .hero-image-container {
+    justify-content: center;
+    order: -1;
+  }
+  .hero-title { font-size: 44px; }
+  .hero-subtitle { margin-left: auto; margin-right: auto; }
+}
+
+@media (max-width: 650px) {
+  .ponuda-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  header {
+    padding: 0 4vw;
+  }
+}

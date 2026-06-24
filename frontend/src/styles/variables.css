@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+:root {
+  --boja-tamno-zelena: #1a3322;
+  --boja-kadulja: #a3c6a8;
+  --boja-kadulja-tamnija: #8bb391;
+  --boja-pozadina: #f7f9f6;
+  --boja-tekst: #2c332e;
+  --boja-tekst-siva: #666666;
+  --boja-tekst-siva-2: #555555;
+  --boja-podnaslov: #4a544e;
+  --boja-ivica: #e0e6e4;
+  --boja-ivica-siva: #cbd5e1;
+  --boja-pozadina-siva: #f8fafc;
+  --boja-pozadina-siva-ivica: #e2e8f0;
+  --boja-tamno-plava-podnozje: #12152d;
+  --boja-plava: #3182ce;
+  --boja-plava-tamnija: #2b6cb0;
+  --boja-crvena: #e53e3e;
+  --boja-crvena-tamnija: #c53030;
+  --boja-tamna-naslov: #2c3e50;
+  --boja-label: #4a5568;
+
+  --font-naslov: 'Playfair Display', Georgia, serif;
+  --font-tekst: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --max-sirina: 1100px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-tekst);
+  background-color: var(--boja-pozadina);
+  color: var(--boja-tekst);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+main {
+  width: 100%;
+  max-width: var(--max-sirina);
+  margin: 40px auto 0 auto;
+  padding: 0 20px;
+  flex: 1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.pretraga-input {
+  margin-top: 16px;
+  padding: 10px 16px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--boja-ivica-siva);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pretraga-input:focus {
+  border-color: var(--boja-kadulja);
+  box-shadow: 0 0 0 3px rgba(163, 198, 168, 0.2);
+}
+
+.nema-rezultata-poruka {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--boja-tekst-siva);
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.učitavanje-poruka {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #888888;
+}

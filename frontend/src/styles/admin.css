@@ -1,0 +1,204 @@
+.admin-kontejner {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  color: #333333;
+}
+
+.odabir-akcije {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: var(--boja-pozadina-siva);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--boja-pozadina-siva-ivica);
+}
+
+.odabir-akcije p {
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: var(--boja-tamna-naslov);
+}
+
+.btn-izbor {
+  background-color: var(--boja-ivica-siva);
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 6px;
+  font-size: 15px;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-izbor.aktivno {
+  background-color: var(--boja-kadulja);
+  color: white;
+}
+
+.admin-sekcija {
+  margin-bottom: 20px;
+}
+
+.admin-sekcija h2 {
+  font-family: var(--font-naslov);
+  color: var(--boja-tamna-naslov);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--boja-kadulja);
+  font-size: 22px;
+}
+
+.forma-grupa {
+  margin-bottom: 20px;
+}
+
+.forma-grupa label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--boja-label);
+  text-align: left;
+}
+
+.forma-grupa input,
+.forma-grupa textarea,
+.forma-grupa select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--boja-ivica-siva);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.forma-grupa input:focus,
+.forma-grupa textarea:focus,
+.forma-grupa select:focus {
+  outline: none;
+  border-color: var(--boja-kadulja);
+}
+
+.btn-spasi {
+  background-color: var(--boja-kadulja);
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  font-size: 16px;
+  border-radius: var(--radius-md);
+  width: 100%;
+  font-weight: bold;
+}
+
+.btn-spasi:hover {
+  background-color: var(--boja-kadulja-tamnija);
+}
+
+.btn-spasi.mod-izmjena-sport {
+  background-color: #8eb1d3;
+}
+
+.btn-spasi.mod-izmjena-sportista {
+  background-color: var(--boja-plava);
+}
+
+.btn-spasi:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.upravljanje-sport-blok {
+  background: var(--boja-pozadina-siva);
+  border: 1px solid var(--boja-pozadina-siva-ivica);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.upravljanje-red {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf2f7;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.upravljanje-red:last-child {
+  border-bottom: none;
+}
+
+.upravljanje-zaglavlje-bloka {
+  border-bottom: 2px solid var(--boja-ivica-siva);
+  padding-bottom: 10px;
+}
+
+.upravljanje-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.upravljanje-mini-slika {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.upravljanje-mini-slika.slika-obla {
+  border-radius: 50%;
+}
+
+.upravljanje-akcije {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-uredi,
+.btn-obrisi {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: white;
+  font-size: 13px;
+}
+
+.btn-uredi {
+  background-color: var(--boja-plava);
+}
+
+.btn-uredi:hover {
+  background-color: var(--boja-plava-tamnija);
+}
+
+.btn-obrisi {
+  background-color: var(--boja-crvena);
+}
+
+.btn-obrisi:hover {
+  background-color: var(--boja-crvena-tamnija);
+}
+
+.upravljanje-sportisti-lista {
+  margin-top: 15px;
+  padding-left: 20px;
+  border-left: 3px solid var(--boja-kadulja);
+}
+
+@media (max-width: 600px) {
+  .admin-kontejner {
+    margin: 20px 12px;
+    padding: 20px;
+  }
+  .btn-izbor {
+    width: 100%;
+    margin: 4px 0;
+  }
+}
