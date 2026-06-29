@@ -16,31 +16,25 @@ export default function AdminFormaSport({ sportZaIzmjenu, onSacuvaj }) {
   function obradiSubmit(e) {
     e.preventDefault();
 
-    // Nema backenda, pa se odabrana slika samo privremeno pretvara u lokalni blob URL, ne čuva se trajno
-    const novaSlika = slikaRef.current.files[0]
-      ? URL.createObjectURL(slikaRef.current.files[0])
-      : sportZaIzmjenu?.slika || "";
+    const nizPozicija = pozicijeRef.current.value
+      ? pozicijeRef.current.value.split(",").map((p) => p.trim()).filter(Boolean)
+      : [];
 
-    const novaGalerija = galerijaRef.current.files.length
-      ? Array.from(galerijaRef.current.files).map((f) => URL.createObjectURL(f))
-      : sportZaIzmjenu?.galerija || [];
+    const stvarniFajlSlike = slikaRef.current.files[0] || null;
 
-    const pozicijeNiz = pozicijeRef.current.value
-      .split(",")
-      .map((p) => p.trim())
-      .filter(Boolean);
+    const fajloviGalerije = galerijaRef.current.files 
+      ? Array.from(galerijaRef.current.files) 
+      : [];
 
     onSacuvaj({
-      id: idRef.current.value,
-      naziv: nazivRef.current.value,
-      opis: opisRef.current.value,
-      savez: savezRef.current.value,
-      slika: novaSlika,
-      galerija: novaGalerija,
-      pozicije: pozicijeNiz,
-    });
-
-    alert(jeIzmjena ? "Sport uspješno izmijenjen!" : "Novi sport uspješno sačuvan!");
+      id: idRef.current.value.trim().toLowerCase(), 
+      naziv: nazivRef.current.value.trim(),
+      opis: opisRef.current.value.trim(),
+      savez: savezRef.current.value.trim(),
+      pozicije: nizPozicija, 
+      slika: stvarniFajlSlike, 
+      galerija: fajloviGalerije 
+    }, jeIzmjena); 
   }
 
   return (

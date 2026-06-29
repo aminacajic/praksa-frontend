@@ -9,18 +9,14 @@ const sportSeUklapa = (sport, pojam) =>
   );
 
 export default function AdminUpravljanje({ sportovi, onUrediSport, onUrediSportistu, onObrisiSport, onObrisiSportistu }) {
-  const { pojam, setPojam, filtrirano } = usePretraga(sportovi, sportSeUklapa);
+  const { pojam, setPojam, filtrirano } = usePretraga(sportovi);
 
   function obrisiSport(sportId) {
-    if (!confirm("Da li sigurno želite obrisati cijeli ovaj sport i sve njegove sportiste?")) return;
     onObrisiSport(sportId);
-    alert("Sport uspješno obrisan!");
   }
 
   function obrisiSportistu(sportId, ime) {
-    if (!confirm(`Da li sigurno želite obrisati sportistu: ${ime}?`)) return;
     onObrisiSportistu(sportId, ime);
-    alert("Sportista uspješno obrisan!");
   }
 
   return (
