@@ -75,12 +75,12 @@ export default function Header() {
             </a>
           </li>
           <li>
+            <a href="#kontakt">Kontakt</a>
+          </li>
+          <li>
             <NavLink to="/vijesti" className={({ isActive }) => (isActive ? "aktivna-ruta" : "")}>
               Vijesti
             </NavLink>
-          </li>
-          <li>
-            <a href="#kontakt">Kontakt</a>
           </li>
           <li>
             <NavLink to="/admin" className={({ isActive }) => (isActive ? "aktivna-ruta" : "")}>

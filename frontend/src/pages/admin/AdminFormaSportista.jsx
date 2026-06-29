@@ -1,17 +1,15 @@
 import { useMemo, useRef, useState } from "react";
 import FormGroup from "../../components/FormGroup.jsx";
 import SlikaPostojeca from "../../components/SlikaPostojeca.jsx";
-import { useApiForma } from "../../hooks/useApiForma.js";
 
 const NOVA_POZICIJA_VRIJEDNOST = "__nova__";
 
-export default function AdminFormaSportista({ sportovi, sportistaZaIzmjenu, onUspjeh }) {
+export default function AdminFormaSportista({ sportovi, sportistaZaIzmjenu, onSacuvaj }) {
   const imeRef = useRef();
   const infoRef = useRef();
   const slikaRef = useRef();
 
   const jeIzmjena = Boolean(sportistaZaIzmjenu);
-  const { salje, posalji } = useApiForma("/api/spasi-sportistu", onUspjeh);
 
   const [odabraniSportId, setOdabraniSportId] = useState(sportistaZaIzmjenu?.sportId || "");
   const [odabranaUloga, setOdabranaUloga] = useState(sportistaZaIzmjenu?.uloga || "");
@@ -25,27 +23,27 @@ export default function AdminFormaSportista({ sportovi, sportistaZaIzmjenu, onUs
   function obradiSubmit(e) {
     e.preventDefault();
 
-    const jeNovaPozicija = odabranaUloga === NOVA_POZICIJA_VRIJEDNOST;
-    const finalnaUloga = jeNovaPozicija ? novaPozicija.trim() : odabranaUloga;
+    const finalnaUloga =
+      odabranaUloga === NOVA_POZICIJA_VRIJEDNOST ? novaPozicija.trim() : odabranaUloga;
 
     if (!odabraniSportId || !finalnaUloga) {
       alert("Molimo izaberite sport i poziciju.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("originalnoIme", sportistaZaIzmjenu?.ime || "");
-    formData.append("sportId", odabraniSportId);
-    formData.append("ime", imeRef.current.value);
-    formData.append("uloga", finalnaUloga);
-    formData.append("info", infoRef.current.value);
-    formData.append("jeNovaPozicija", jeNovaPozicija ? "true" : "false");
+    // Nema backenda, pa se odabrana slika samo privremeno pretvara u lokalni blob URL, ne čuva se trajno
+    const novaSlika = slikaRef.current.files[0]
+      ? URL.createObjectURL(slikaRef.current.files[0])
+      : sportistaZaIzmjenu?.slika || "";
 
-    if (slikaRef.current.files[0]) {
-      formData.append("slikaIgraca", slikaRef.current.files[0]);
-    }
+    onSacuvaj(odabraniSportId, {
+      ime: imeRef.current.value,
+      uloga: finalnaUloga,
+      info: infoRef.current.value,
+      slika: novaSlika,
+    });
 
-    posalji(formData);
+    alert(jeIzmjena ? "Uspješno izmijenjen sportista!" : "Uspješno sačuvan sportista!");
   }
 
   return (
@@ -138,12 +136,8 @@ export default function AdminFormaSportista({ sportovi, sportistaZaIzmjenu, onUs
           />
         </FormGroup>
 
-        <button
-          type="submit"
-          className={`btn-spasi ${jeIzmjena ? "mod-izmjena-sportista" : ""}`}
-          disabled={salje}
-        >
-          {salje ? "Spašavanje..." : jeIzmjena ? "Sačuvaj izmjene" : "Sačuvaj"}
+        <button type="submit" className={`btn-spasi ${jeIzmjena ? "mod-izmjena-sportista" : ""}`}>
+          {jeIzmjena ? "Sačuvaj izmjene" : "Sačuvaj"}
         </button>
       </form>
     </section>

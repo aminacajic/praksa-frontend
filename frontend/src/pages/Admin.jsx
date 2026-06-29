@@ -5,7 +5,7 @@ import AdminFormaSportista from "./admin/AdminFormaSportista.jsx";
 import AdminUpravljanje from "./admin/AdminUpravljanje.jsx";
 
 export default function Admin() {
-  const { sportovi, ucitavanje, ponovoUcitaj } = useSportoviData();
+  const { sportovi, sacuvajSport, obrisiSport, sacuvajSportistu, obrisiSportistu } = useSportoviData();
 
   const [tab, setTab] = useState("sport"); 
   const [sportZaIzmjenu, setSportZaIzmjenu] = useState(null);
@@ -35,65 +35,71 @@ export default function Admin() {
     setTab("sportista");
   }
 
-  function naUspjeh() {
-    ponovoUcitaj();
+  function vratiNaUpravljanje() {
     setSportZaIzmjenu(null);
     setSportistaZaIzmjenu(null);
     setTab("upravljanje");
   }
 
+  function obradiSacuvajSport(podaciSporta) {
+    sacuvajSport(podaciSporta);
+    vratiNaUpravljanje();
+  }
+
+  function obradiSacuvajSportistu(sportId, podaciSportiste) {
+    sacuvajSportistu(sportId, podaciSportiste, sportistaZaIzmjenu?.ime);
+    vratiNaUpravljanje();
+  }
+
   return (
-    <>
-      <div className="admin-kontejner">
-        <div className="odabir-akcije">
-          <p>Šta želite raditi u bazi podataka?</p>
-          <button type="button" className={`btn-izbor ${tab === "sport" ? "aktivno" : ""}`} onClick={otvoriNoviSport}>
-            Novi sport
-          </button>
-          <button
-            type="button"
-            className={`btn-izbor ${tab === "sportista" ? "aktivno" : ""}`}
-            onClick={otvoriNovogSportistu}
-          >
-            Novi sportista
-          </button>
-          <button
-            type="button"
-            className={`btn-izbor ${tab === "upravljanje" ? "aktivno" : ""}`}
-            onClick={otvoriUpravljanje}
-          >
-            Uređivanje
-          </button>
-        </div>
-
-        {ucitavanje ? (
-          <p className="učitavanje-poruka">Učitavanje podataka...</p>
-        ) : (
-          <>
-            {tab === "sport" && (
-              <AdminFormaSport key={sportZaIzmjenu?.id || "novi-sport"} sportZaIzmjenu={sportZaIzmjenu} onUspjeh={naUspjeh} />
-            )}
-
-            {tab === "sportista" && (
-              <AdminFormaSportista
-                key={sportistaZaIzmjenu ? `${sportistaZaIzmjenu.sportId}-${sportistaZaIzmjenu.ime}` : "novi-sportista"}
-                sportovi={sportovi}
-                sportistaZaIzmjenu={sportistaZaIzmjenu}
-                onUspjeh={naUspjeh}
-              />
-            )}
-
-            {tab === "upravljanje" && (
-              <AdminUpravljanje
-                sportovi={sportovi}
-                onUrediSport={urediSport}
-                onUrediSportistu={urediSportistu}
-                onPromjena={ponovoUcitaj}
-              />
-            )}
-          </>
-        )}
+    <div className="admin-kontejner">
+      <div className="odabir-akcije">
+        <p>Šta želite raditi u bazi podataka?</p>
+        <button type="button" className={`btn-izbor ${tab === "sport" ? "aktivno" : ""}`} onClick={otvoriNoviSport}>
+          Novi sport
+        </button>
+        <button
+          type="button"
+          className={`btn-izbor ${tab === "sportista" ? "aktivno" : ""}`}
+          onClick={otvoriNovogSportistu}
+        >
+          Novi sportista
+        </button>
+        <button
+          type="button"
+          className={`btn-izbor ${tab === "upravljanje" ? "aktivno" : ""}`}
+          onClick={otvoriUpravljanje}
+        >
+          Uređivanje
+        </button>
       </div>
-    </>
+
+      {tab === "sport" && (
+        <AdminFormaSport
+          key={sportZaIzmjenu?.id || "novi-sport"}
+          sportZaIzmjenu={sportZaIzmjenu}
+          onSacuvaj={obradiSacuvajSport}
+        />
+      )}
+
+      {tab === "sportista" && (
+        <AdminFormaSportista
+          key={sportistaZaIzmjenu ? `${sportistaZaIzmjenu.sportId}-${sportistaZaIzmjenu.ime}` : "novi-sportista"}
+          sportovi={sportovi}
+          sportistaZaIzmjenu={sportistaZaIzmjenu}
+          onSacuvaj={obradiSacuvajSportistu}
+        />
+      )}
+
+      {tab === "upravljanje" && (
+        <AdminUpravljanje
+          sportovi={sportovi}
+          onUrediSport={urediSport}
+          onUrediSportistu={urediSportistu}
+          onObrisiSport={obrisiSport}
+          onObrisiSportistu={obrisiSportistu}
+        />
+      )}
+    </div>
   );
 }

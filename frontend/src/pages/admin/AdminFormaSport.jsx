@@ -1,9 +1,8 @@
 import { useRef } from "react";
 import FormGroup from "../../components/FormGroup.jsx";
 import SlikaPostojeca from "../../components/SlikaPostojeca.jsx";
-import { useApiForma } from "../../hooks/useApiForma.js";
 
-export default function AdminFormaSport({ sportZaIzmjenu, onUspjeh }) {
+export default function AdminFormaSport({ sportZaIzmjenu, onSacuvaj }) {
   const idRef = useRef();
   const nazivRef = useRef();
   const opisRef = useRef();
@@ -13,31 +12,35 @@ export default function AdminFormaSport({ sportZaIzmjenu, onUspjeh }) {
   const galerijaRef = useRef();
 
   const jeIzmjena = Boolean(sportZaIzmjenu);
-  const { salje, posalji } = useApiForma("/api/spasi-sport", onUspjeh);
 
   function obradiSubmit(e) {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("id", idRef.current.value);
-    formData.append("naziv", nazivRef.current.value);
-    formData.append("opis", opisRef.current.value);
-    formData.append("savez", savezRef.current.value);
+    // Nema backenda, pa se odabrana slika samo privremeno pretvara u lokalni blob URL, ne čuva se trajno
+    const novaSlika = slikaRef.current.files[0]
+      ? URL.createObjectURL(slikaRef.current.files[0])
+      : sportZaIzmjenu?.slika || "";
+
+    const novaGalerija = galerijaRef.current.files.length
+      ? Array.from(galerijaRef.current.files).map((f) => URL.createObjectURL(f))
+      : sportZaIzmjenu?.galerija || [];
 
     const pozicijeNiz = pozicijeRef.current.value
       .split(",")
       .map((p) => p.trim())
       .filter(Boolean);
-    formData.append("pozicije", JSON.stringify(pozicijeNiz));
 
-    if (slikaRef.current.files[0]) {
-      formData.append("slikaSporta", slikaRef.current.files[0]);
-    }
-    for (const fajl of galerijaRef.current.files) {
-      formData.append("galerijaSlike", fajl);
-    }
+    onSacuvaj({
+      id: idRef.current.value,
+      naziv: nazivRef.current.value,
+      opis: opisRef.current.value,
+      savez: savezRef.current.value,
+      slika: novaSlika,
+      galerija: novaGalerija,
+      pozicije: pozicijeNiz,
+    });
 
-    posalji(formData);
+    alert(jeIzmjena ? "Sport uspješno izmijenjen!" : "Novi sport uspješno sačuvan!");
   }
 
   return (
@@ -116,8 +119,8 @@ export default function AdminFormaSport({ sportZaIzmjenu, onUspjeh }) {
           />
         </FormGroup>
 
-        <button type="submit" className={`btn-spasi ${jeIzmjena ? "mod-izmjena-sport" : ""}`} disabled={salje}>
-          {salje ? "Spašavanje..." : jeIzmjena ? "Sačuvaj izmjene" : "Sačuvaj sport"}
+        <button type="submit" className={`btn-spasi ${jeIzmjena ? "mod-izmjena-sport" : ""}`}>
+          {jeIzmjena ? "Sačuvaj izmjene" : "Sačuvaj sport"}
         </button>
       </form>
     </section>

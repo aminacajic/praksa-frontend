@@ -8,27 +8,19 @@ const sportSeUklapa = (sport, pojam) =>
     (sp) => sp.ime.toLowerCase().includes(pojam) || (sp.uloga && sp.uloga.toLowerCase().includes(pojam))
   );
 
-export default function AdminUpravljanje({ sportovi, onUrediSport, onUrediSportistu, onPromjena }) {
+export default function AdminUpravljanje({ sportovi, onUrediSport, onUrediSportistu, onObrisiSport, onObrisiSportistu }) {
   const { pojam, setPojam, filtrirano } = usePretraga(sportovi, sportSeUklapa);
 
   function obrisiSport(sportId) {
     if (!confirm("Da li sigurno želite obrisati cijeli ovaj sport i sve njegove sportiste?")) return;
-    fetch(`/api/obrisi-sport/${sportId}`, { method: "DELETE" })
-      .then((res) => res.json())
-      .then((odg) => {
-        alert(odg.poruka);
-        onPromjena();
-      });
+    onObrisiSport(sportId);
+    alert("Sport uspješno obrisan!");
   }
 
   function obrisiSportistu(sportId, ime) {
     if (!confirm(`Da li sigurno želite obrisati sportistu: ${ime}?`)) return;
-    fetch(`/api/obrisi-sportistu/${sportId}/${encodeURIComponent(ime)}`, { method: "DELETE" })
-      .then((res) => res.json())
-      .then((odg) => {
-        alert(odg.poruka);
-        onPromjena();
-      });
+    onObrisiSportistu(sportId, ime);
+    alert("Sportista uspješno obrisan!");
   }
 
   return (
