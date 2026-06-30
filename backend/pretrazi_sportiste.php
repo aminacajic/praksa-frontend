@@ -9,49 +9,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-$jsonPutanja = __DIR__ . '/data/podaci.json';
+require_once __DIR__ . "/konekcija.php";
 
-if (!file_exists($jsonPutanja)) {
-    http_response_code(404);
-    echo json_encode(["poruka" => "Baza podaci.json ne postoji."]);
+$pojam = trim($_GET['pojam'] ?? '');
+
+if ($pojam === '') {
+    require __DIR__ . "/get_sportovi.php";
     exit;
 }
 
-// PHP hvata parametar iz URL-a pomoću $_GET niza 
-$pojam = isset($_GET['pojam']) ? trim($_GET['pojam']) : '';
-$pojamLower = mb_strtolower($pojam, 'UTF-8');
+$like = "%" . $pojam . "%";
 
-$sportovi = json_decode(file_get_contents($jsonPutanja), true);
+$sql = "
+    SELECT DISTINCT s.id, s.naziv, s.slika, s.opis, s.savez
+    FROM sportovi s
+    WHERE s.naziv LIKE :pojam
+       OR s.id IN (
+           SELECT DISTINCT sp.sport_id
+           FROM sportisti sp
+           WHERE sp.ime LIKE :pojam OR sp.uloga LIKE :pojam
+       )
+    ORDER BY s.id ASC
+";
 
-// Ako je pojam prazan, vrati sve sportove bez filtriranja
-if ($pojamLower === '') {
-    echo json_encode($sportovi);
-    exit;
-}
+$stmt = $konekcija->prepare($sql);
+$stmt->execute([":pojam" => $like]);
+$sportovi = $stmt->fetchAll();
 
-$filtriraniRezultati = [];
+$stmtGal = $konekcija->prepare("SELECT slika FROM galerija WHERE sport_id = ? ORDER BY redoslijed ASC");
+$stmtPoz = $konekcija->prepare("SELECT naziv FROM pozicije WHERE sport_id = ? ORDER BY id ASC");
+$stmtSvi = $konekcija->prepare("SELECT id, ime, uloga, info, slika FROM sportisti WHERE sport_id = ? ORDER BY ime ASC");
+$stmtSp  = $konekcija->prepare("
+    SELECT id, ime, uloga, info, slika
+    FROM sportisti
+    WHERE sport_id = ? AND (ime LIKE ? OR uloga LIKE ?)
+    ORDER BY ime ASC
+");
+
+$rezultat = [];
 
 foreach ($sportovi as $sport) {
-    if (str_contains(mb_strtolower($sport['naziv'], 'UTF-8'), $pojamLower)) {
-        $filtriraniRezultati[] = $sport;
-        continue;
+    $sportId = (int) $sport["id"];
+
+    $stmtGal->execute([$sportId]);
+    $galerija = array_column($stmtGal->fetchAll(), "slika");
+
+    $stmtPoz->execute([$sportId]);
+    $pozicije = array_column($stmtPoz->fetchAll(), "naziv");
+
+    $nazivOdgovara = mb_stripos($sport["naziv"], $pojam) !== false;
+
+    if ($nazivOdgovara) {
+        $stmtSvi->execute([$sportId]);
+        $sportisti = $stmtSvi->fetchAll();
+    } else {
+        $stmtSp->execute([$sportId, $like, $like]);
+        $sportisti = $stmtSp->fetchAll();
     }
 
-    $pronadjeniSportisti = [];
-    foreach ($sport['sportisti'] as $sportista) {
-        $imeLower = mb_strtolower($sportista['ime'], 'UTF-8');
-        $ulogaLower = mb_strtolower($sportista['uloga'] ?? '', 'UTF-8');
-
-        if (str_contains($imeLower, $pojamLower) || str_contains($ulogaLower, $pojamLower)) {
-            $pronadjeniSportisti[] = $sportista;
-        }
+    foreach ($sportisti as &$sp) {
+        $sp["id"] = (int) $sp["id"];
     }
 
-    if (count($pronadjeniSportisti) > 0) {
-        $modifikovaniSport = $sport;
-        $modifikovaniSport['sportisti'] = $pronadjeniSportisti;
-        $filtriraniRezultati[] = $modifikovaniSport;
-    }
+    $rezultat[] = [
+        "id"        => $sportId,
+        "naziv"     => $sport["naziv"],
+        "slika"     => $sport["slika"],
+        "galerija"  => $galerija,
+        "opis"      => $sport["opis"],
+        "savez"     => $sport["savez"],
+        "pozicije"  => $pozicije,
+        "sportisti" => $sportisti,
+    ];
 }
 
-echo json_encode($filtriraniRezultati, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+echo json_encode($rezultat, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

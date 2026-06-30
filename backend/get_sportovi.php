@@ -9,21 +9,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-$jsonPutanja = __DIR__ . '/data/podaci.json';
+require_once __DIR__ . "/konekcija.php";
 
-if (!file_exists($jsonPutanja)) {
-    http_response_code(404);
-    echo json_encode(["poruka" => "PHP Greška: Fajl ne postoji na putanji: " . $jsonPutanja]);
-    exit;
+$sportovi = $konekcija
+    ->query("SELECT id, naziv, opis, savez, slika FROM sportovi ORDER BY id ASC")
+    ->fetchAll();
+
+$stmtGal = $konekcija->prepare("SELECT slika FROM galerija WHERE sport_id = ? ORDER BY redoslijed ASC");
+$stmtPoz = $konekcija->prepare("SELECT naziv FROM pozicije WHERE sport_id = ? ORDER BY id ASC");
+$stmtSp  = $konekcija->prepare("SELECT id, ime, uloga, info, slika FROM sportisti WHERE sport_id = ? ORDER BY ime ASC");
+
+$rezultat = [];
+
+foreach ($sportovi as $sport) {
+    $sportId = (int) $sport["id"];
+
+    $stmtGal->execute([$sportId]);
+    $galerija = array_column($stmtGal->fetchAll(), "slika");
+
+    $stmtPoz->execute([$sportId]);
+    $pozicije = array_column($stmtPoz->fetchAll(), "naziv");
+
+    $stmtSp->execute([$sportId]);
+    $sportisti = $stmtSp->fetchAll();
+    foreach ($sportisti as &$sp) {
+        $sp["id"] = (int) $sp["id"];
+    }
+
+    $rezultat[] = [
+        "id"        => $sportId,
+        "naziv"     => $sport["naziv"],
+        "slika"     => $sport["slika"],
+        "galerija"  => $galerija,
+        "opis"      => $sport["opis"],
+        "savez"     => $sport["savez"],
+        "pozicije"  => $pozicije,
+        "sportisti" => $sportisti,
+    ];
 }
 
-$siroviPodaci = file_get_contents($jsonPutanja);
-$sportovi = json_decode($siroviPodaci, true);
-
-if ($sportovi === null) {
-    http_response_code(500);
-    echo json_encode(["poruka" => "PHP Greška: JSON unutar podaci.json nije validan."]);
-    exit;
-}
-
-echo json_encode($sportovi, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+echo json_encode($rezultat, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

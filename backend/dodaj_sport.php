@@ -8,71 +8,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-$jsonPutanja = __DIR__ . '/data/podaci.json';
-$direktorijZaSlike = __DIR__ . '/images/';
+require_once __DIR__ . "/konekcija.php";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $id = trim($_POST["id"] ?? "");
-    $naziv = trim($_POST["naziv"] ?? "");
-    $opis = trim($_POST["opis"] ?? "");
-    $savez = trim($_POST["savez"] ?? "");
-    $pozicije = json_decode($_POST["pozicije"] ?? "[]", true);
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    http_response_code(405);
+    echo json_encode(["poruka" => "Metoda nije dozvoljena."]);
+    exit;
+}
 
-    if ($id === "" || $naziv === "") {
-        http_response_code(400);
-        echo json_encode(["poruka" => "ID i naziv sporta su obavezni!"]);
-        exit;
+$naziv    = trim($_POST["naziv"]   ?? "");
+$opis     = trim($_POST["opis"]    ?? "");
+$savez    = trim($_POST["savez"]   ?? "");
+$pozicije = json_decode($_POST["pozicije"] ?? "[]", true);
+
+if ($naziv === "") {
+    http_response_code(400);
+    echo json_encode(["poruka" => "Naziv sporta je obavezan!"]);
+    exit;
+}
+
+$dirSlike = __DIR__ . "/images/";
+if (!is_dir($dirSlike)) mkdir($dirSlike, 0777, true);
+
+$putanjaGlavne = "./images/placeholder.png";
+if (isset($_FILES["slika"]) && $_FILES["slika"]["error"] === UPLOAD_ERR_OK) {
+    $ext     = strtolower(pathinfo($_FILES["slika"]["name"], PATHINFO_EXTENSION));
+    $novoIme = "sport_" . time() . "_" . bin2hex(random_bytes(4)) . "." . $ext;
+    if (move_uploaded_file($_FILES["slika"]["tmp_name"], $dirSlike . $novoIme)) {
+        $putanjaGlavne = "./images/" . $novoIme;
     }
+}
 
-    if (!is_dir($direktorijZaSlike)) {
-        mkdir($direktorijZaSlike, 0777, true);
-    }
+$konekcija->beginTransaction();
+try {
+    $stmt = $konekcija->prepare(
+        "INSERT INTO sportovi (naziv, opis, savez, slika) VALUES (?, ?, ?, ?)"
+    );
+    $stmt->execute([$naziv, $opis, $savez, $putanjaGlavne]);
+    $sportId = (int) $konekcija->lastInsertId();
 
-    $putanjaGlavneSlike = "./images/placeholder.png";
-    if (isset($_FILES["slika"]) && $_FILES["slika"]["error"] === UPLOAD_ERR_OK) {
-        $ekstenzija = pathinfo($_FILES["slika"]["name"], PATHINFO_EXTENSION);
-        $novoIme = "sport_" . time() . "_" . bin2hex(random_bytes(2)) . "." . $ekstenzija;
-        if (move_uploaded_file($_FILES["slika"]["tmp_name"], $direktorijZaSlike . $novoIme)) {
-            $putanjaGlavneSlike = "./images/" . $novoIme;
-        }
-    }
-
-    $putanjeGalerije = [];
-    if (isset($_FILES["galerija"])) {
+    if (isset($_FILES["galerija"]["name"])) {
         $fajlovi = $_FILES["galerija"];
+        $stmtGal = $konekcija->prepare(
+            "INSERT INTO galerija (sport_id, slika, redoslijed) VALUES (?, ?, ?)"
+        );
+        $red = 1;
         for ($i = 0; $i < count($fajlovi["name"]); $i++) {
-            if ($fajlovi["error"][$i] === UPLOAD_ERR_OK) {
-                $ekstenzija = pathinfo($fajlovi["name"][$i], PATHINFO_EXTENSION);
-                $novoImeG = "gal_" . time() . "_" . bin2hex(random_bytes(2)) . "_" . $i . "." . $ekstenzija;
-                if (move_uploaded_file($fajlovi["tmp_name"][$i], $direktorijZaSlike . $novoImeG)) {
-                    $putanjeGalerije[] = "./images/" . $novoImeG;
-                }
+            if ($fajlovi["error"][$i] !== UPLOAD_ERR_OK) continue;
+            $ext     = strtolower(pathinfo($fajlovi["name"][$i], PATHINFO_EXTENSION));
+            $novoIme = "gal_" . time() . "_" . bin2hex(random_bytes(2)) . "_$i.$ext";
+            if (move_uploaded_file($fajlovi["tmp_name"][$i], $dirSlike . $novoIme)) {
+                $stmtGal->execute([$sportId, "./images/" . $novoIme, $red++]);
             }
         }
     }
 
-    $sportovi = json_decode(file_get_contents($jsonPutanja), true);
-
-    foreach ($sportovi as $s) {
-        if ($s["id"] === $id) {
-            http_response_code(400);
-            echo json_encode(["poruka" => "Sport sa ovim ID-em već postoji!"]);
-            exit;
+    if (!empty($pozicije)) {
+        $stmtPoz = $konekcija->prepare(
+            "INSERT IGNORE INTO pozicije (sport_id, naziv) VALUES (?, ?)"
+        );
+        foreach ($pozicije as $poz) {
+            $poz = trim($poz);
+            if ($poz !== "") $stmtPoz->execute([$sportId, $poz]);
         }
     }
 
-    $noviSport = [
-        "id" => $id,
-        "naziv" => $naziv,
-        "opis" => $opis,
-        "savez" => $savez,
-        "slika" => $putanjaGlavneSlike,
-        "galerija" => $putanjeGalerije,
-        "pozicije" => $pozicije,
-        "sportisti" => []
-    ];
-
-    $sportovi[] = $noviSport;
-    file_put_contents($jsonPutanja, json_encode($sportovi, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    echo json_encode(["poruka" => "Novi sport uspješno kreiran!"]);
+    $konekcija->commit();
+    echo json_encode([
+        "poruka" => "Novi sport uspješno kreiran!",
+        "id"     => $sportId,
+    ], JSON_UNESCAPED_UNICODE);
+} catch (PDOException $e) {
+    $konekcija->rollBack();
+    http_response_code(500);
+    echo json_encode(["poruka" => "Greška pri upisivanju: " . $e->getMessage()]);
 }

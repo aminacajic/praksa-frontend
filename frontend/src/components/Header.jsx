@@ -50,7 +50,7 @@ export default function Header() {
   return (
     <header>
       <div>
-        <img className="logo" src="/images/logo.png" alt="Logo BH sporta" />
+        <img className="logo" src="./images/logo.png" alt="Logo BH sporta" />
         <h1 className="klik-naslov" onClick={idiNaPocetnu}>
           BH sport
         </h1>

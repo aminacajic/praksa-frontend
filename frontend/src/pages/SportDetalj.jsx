@@ -11,16 +11,18 @@ const filtrirajSportiste = (sp, pojam) =>
   sp.ime.toLowerCase().includes(pojam) || (sp.uloga && sp.uloga.toLowerCase().includes(pojam));
 
 export default function SportDetalj() {
-  const { id } = useParams();
+  const { id } = useParams();     
   const navigate = useNavigate();
   const { sportovi, ucitavanje } = useSportoviData();
 
-  const sport = useMemo(() => sportovi.find((s) => s.id === id), [sportovi, id]);
+  const idBroj = Number(id);
+
+  const sport = useMemo(() => sportovi.find((s) => s.id === idBroj), [sportovi, idBroj]);
   const { pojam, setPojam, filtrirano } = usePretraga(sport?.sportisti || [], filtrirajSportiste);
 
   const otvoriSportistu = useCallback(
-    (ime) => () => navigate(`/sportista/${id}/${encodeURIComponent(ime)}`),
-    [navigate, id]
+    (sportistaId) => () => navigate(`/sportista/${idBroj}/${sportistaId}`),
+    [navigate, idBroj]
   );
 
   if (ucitavanje) {
@@ -67,14 +69,14 @@ export default function SportDetalj() {
           <StanjeListe
             stavke={filtrirano}
             porukaPraznine="Nema pronađenih sportista za vašu pretragu."
-            getKey={(sp) => sp.ime}
+            getKey={(sp) => sp.id}
             renderItem={(sportista) => (
               <Card
                 slika={sportista.slika}
                 naslov={sportista.ime}
                 podnaslov={sportista.uloga}
                 opis={sportista.info}
-                onClick={otvoriSportistu(sportista.ime)}
+                onClick={otvoriSportistu(sportista.id)}
               />
             )}
           />

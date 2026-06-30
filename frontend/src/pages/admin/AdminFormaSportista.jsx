@@ -20,7 +20,7 @@ export default function AdminFormaSportista({ sportovi, sportistaZaIzmjenu, onSa
     [sportovi, odabraniSportId]
   );
 
-function obradiSubmit(e) {
+  function obradiSubmit(e) {
     e.preventDefault();
 
     const finalnaUloga =
@@ -33,16 +33,12 @@ function obradiSubmit(e) {
 
     const stvarniFajlSlike = slikaRef.current.files[0] || null;
 
-    onSacuvaj(
-      odabraniSportId, 
-      {
-        ime: imeRef.current.value,
-        uloga: finalnaUloga,
-        info: infoRef.current.value,
-        slika: stvarniFajlSlike, 
-      }, 
-      sportistaZaIzmjenu?.ime 
-    );
+    onSacuvaj(odabraniSportId, {
+      ime: imeRef.current.value,
+      uloga: finalnaUloga,
+      info: infoRef.current.value,
+      slika: stvarniFajlSlike,
+    });
   }
 
   return (

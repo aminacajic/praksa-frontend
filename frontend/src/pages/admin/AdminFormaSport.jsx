@@ -3,7 +3,6 @@ import FormGroup from "../../components/FormGroup.jsx";
 import SlikaPostojeca from "../../components/SlikaPostojeca.jsx";
 
 export default function AdminFormaSport({ sportZaIzmjenu, onSacuvaj }) {
-  const idRef = useRef();
   const nazivRef = useRef();
   const opisRef = useRef();
   const savezRef = useRef();
@@ -22,37 +21,25 @@ export default function AdminFormaSport({ sportZaIzmjenu, onSacuvaj }) {
 
     const stvarniFajlSlike = slikaRef.current.files[0] || null;
 
-    const fajloviGalerije = galerijaRef.current.files 
-      ? Array.from(galerijaRef.current.files) 
+    const fajloviGalerije = galerijaRef.current.files
+      ? Array.from(galerijaRef.current.files)
       : [];
 
     onSacuvaj({
-      id: idRef.current.value.trim().toLowerCase(), 
+      id: sportZaIzmjenu?.id,
       naziv: nazivRef.current.value.trim(),
       opis: opisRef.current.value.trim(),
       savez: savezRef.current.value.trim(),
-      pozicije: nizPozicija, 
-      slika: stvarniFajlSlike, 
-      galerija: fajloviGalerije 
-    }, jeIzmjena); 
+      pozicije: nizPozicija,
+      slika: stvarniFajlSlike,
+      galerija: fajloviGalerije,
+    }, jeIzmjena);
   }
 
   return (
     <section className="admin-sekcija">
       <h2>{jeIzmjena ? "Uredi sport" : "Dodaj novi sport"}</h2>
       <form onSubmit={obradiSubmit}>
-        <FormGroup label="ID sporta (mora biti jedna riječ, npr: kosarka, tenis):" htmlFor="sport-id">
-          <input
-            type="text"
-            id="sport-id"
-            ref={idRef}
-            required
-            disabled={jeIzmjena}
-            defaultValue={sportZaIzmjenu?.id || ""}
-            placeholder="npr. tenis"
-          />
-        </FormGroup>
-
         <FormGroup label="Naziv sporta:" htmlFor="sport-naziv-unos">
           <input
             type="text"

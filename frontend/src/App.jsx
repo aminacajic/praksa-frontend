@@ -15,7 +15,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Pocetna />} />
           <Route path="/sport/:id" element={<SportDetalj />} />
-          <Route path="/sportista/:sportId/:ime" element={<SportistaDetalj />} />
+          <Route path="/sportista/:sportId/:sportistaId" element={<SportistaDetalj />} />
           <Route path="/vijesti" element={<Vijesti />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>

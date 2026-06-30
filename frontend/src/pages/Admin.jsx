@@ -7,7 +7,7 @@ import AdminUpravljanje from "./admin/AdminUpravljanje.jsx";
 export default function Admin() {
   const { sportovi, sacuvajSport, obrisiSport, sacuvajSportistu, obrisiSportistu } = useSportoviData();
 
-  const [tab, setTab] = useState("sport"); 
+  const [tab, setTab] = useState("sport");
   const [sportZaIzmjenu, setSportZaIzmjenu] = useState(null);
   const [sportistaZaIzmjenu, setSportistaZaIzmjenu] = useState(null);
 
@@ -42,12 +42,12 @@ export default function Admin() {
   }
 
   function obradiSacuvajSport(podaciSporta) {
-    sacuvajSport(podaciSporta);
+    sacuvajSport(podaciSporta, Boolean(sportZaIzmjenu));
     vratiNaUpravljanje();
   }
 
   function obradiSacuvajSportistu(sportId, podaciSportiste) {
-    sacuvajSportistu(sportId, podaciSportiste, sportistaZaIzmjenu?.ime);
+    sacuvajSportistu(sportId, podaciSportiste, sportistaZaIzmjenu?.id);
     vratiNaUpravljanje();
   }
 
@@ -84,7 +84,7 @@ export default function Admin() {
 
       {tab === "sportista" && (
         <AdminFormaSportista
-          key={sportistaZaIzmjenu ? `${sportistaZaIzmjenu.sportId}-${sportistaZaIzmjenu.ime}` : "novi-sportista"}
+          key={sportistaZaIzmjenu ? `${sportistaZaIzmjenu.sportId}-${sportistaZaIzmjenu.id}` : "novi-sportista"}
           sportovi={sportovi}
           sportistaZaIzmjenu={sportistaZaIzmjenu}
           onSacuvaj={obradiSacuvajSportistu}

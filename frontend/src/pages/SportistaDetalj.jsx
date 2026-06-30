@@ -4,16 +4,17 @@ import { useSportoviData } from "../hooks/useSportoviData.js";
 import { apsolutnaSlika } from "../utils/putanje.js";
 
 export default function SportistaDetalj() {
-  const { sportId, ime } = useParams();
+  const { sportId, sportistaId } = useParams();
   const navigate = useNavigate();
   const { sportovi, ucitavanje } = useSportoviData();
 
-  const imeDekodirano = decodeURIComponent(ime);
+  const sportIdBroj     = Number(sportId);
+  const sportistaIdBroj = Number(sportistaId);
 
   const sportista = useMemo(() => {
-    const sport = sportovi.find((s) => s.id === sportId);
-    return sport ? sport.sportisti.find((sp) => sp.ime === imeDekodirano) : null;
-  }, [sportovi, sportId, imeDekodirano]);
+    const sport = sportovi.find((s) => s.id === sportIdBroj);
+    return sport ? sport.sportisti.find((sp) => sp.id === sportistaIdBroj) : null;
+  }, [sportovi, sportIdBroj, sportistaIdBroj]);
 
   if (ucitavanje) {
     return (

@@ -8,30 +8,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-$jsonPutanja = __DIR__ . '/data/podaci.json';
+require_once __DIR__ . "/konekcija.php";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $ulaz = json_decode(file_get_contents("php://input"), true);
-    $sportId = trim($ulaz["sportId"] ?? "");
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    http_response_code(405);
+    echo json_encode(["poruka" => "Metoda nije dozvoljena."]);
+    exit;
+}
 
-    if ($sportId === "") {
-        http_response_code(400);
-        echo json_encode(["poruka" => "ID sporta nedostaje!"]);
-        exit;
-    }
+$ulaz    = json_decode(file_get_contents("php://input"), true);
+$sportId = (int) ($ulaz["sportId"] ?? 0);
 
-    $sportovi = json_decode(file_get_contents($jsonPutanja), true);
-    $pocetniBroj = count($sportovi);
+if ($sportId <= 0) {
+    http_response_code(400);
+    echo json_encode(["poruka" => "ID sporta nedostaje ili nije validan!"]);
+    exit;
+}
 
-    $sportovi = array_values(array_filter($sportovi, function ($s) use ($sportId) {
-        return $s["id"] !== $sportId;
-    }));
+$stmt = $konekcija->prepare("DELETE FROM sportovi WHERE id = ?");
+$stmt->execute([$sportId]);
 
-    if (count($sportovi) < $pocetniBroj) {
-        file_put_contents($jsonPutanja, json_encode($sportovi, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        echo json_encode(["poruka" => "Sport uspješno obrisan iz baze!"]);
-    } else {
-        http_response_code(404);
-        echo json_encode(["poruka" => "Sport nije pronađen u bazi podaci.json."]);
-    }
+if ($stmt->rowCount() > 0) {
+    echo json_encode(["poruka" => "Sport uspješno obrisan iz baze!"], JSON_UNESCAPED_UNICODE);
+} else {
+    http_response_code(404);
+    echo json_encode(["poruka" => "Sport nije pronađen u bazi."], JSON_UNESCAPED_UNICODE);
 }

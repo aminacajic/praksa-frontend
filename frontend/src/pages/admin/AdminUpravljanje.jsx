@@ -15,8 +15,8 @@ export default function AdminUpravljanje({ sportovi, onUrediSport, onUrediSporti
     onObrisiSport(sportId);
   }
 
-  function obrisiSportistu(sportId, ime) {
-    onObrisiSportistu(sportId, ime);
+  function obrisiSportistu(sportistaId, ime) {
+    onObrisiSportistu(sportistaId, ime);
   }
 
   return (
@@ -58,7 +58,7 @@ export default function AdminUpravljanje({ sportovi, onUrediSport, onUrediSporti
               <p style={{ color: "#888", fontSize: 13 }}>Nema unesenih sportista.</p>
             ) : (
               sport.sportisti.map((sp) => (
-                <div className="upravljanje-red" key={sp.ime}>
+                <div className="upravljanje-red" key={sp.id}>
                   <div className="upravljanje-info">
                     <img className="upravljanje-mini-slika" src={apsolutnaSlika(sp.slika)} alt={sp.ime} />
                     <div>
@@ -69,7 +69,7 @@ export default function AdminUpravljanje({ sportovi, onUrediSport, onUrediSporti
                     <button className="btn-uredi" onClick={() => onUrediSportistu(sport.id, sp)}>
                       Uredi
                     </button>
-                    <button className="btn-obrisi" onClick={() => obrisiSportistu(sport.id, sp.ime)}>
+                    <button className="btn-obrisi" onClick={() => obrisiSportistu(sp.id, sp.ime)}>
                       Obriši
                     </button>
                   </div>
