@@ -128,38 +128,39 @@ export function useSportoviData() {
       .catch((err) => alert(err.message));
   }
 
-  function sacuvajSportistu(sportId, podaciSportiste, sportistaIdZaIzmjenu) {
-    const isEdit = !!sportistaIdZaIzmjenu;
-    const formData = new FormData();
-    formData.append("sportId", sportId);
-    formData.append("ime", podaciSportiste.ime);
-    formData.append("uloga", podaciSportiste.uloga);
-    formData.append("info", podaciSportiste.info);
+function sacuvajSportistu(sportId, podaciSportiste, sportistaIdZaIzmjenu) {
+  const isEdit = !!sportistaIdZaIzmjenu;
+  const formData = new FormData();
+  formData.append("sportId", sportId);
+  formData.append("ime", podaciSportiste.ime);
+  formData.append("uloga", podaciSportiste.uloga);
+  formData.append("info", podaciSportiste.info);
 
-    const slikaInput = document.getElementById("sportista-slika");
-    if (slikaInput && slikaInput.files[0]) {
-      formData.append("slika", slikaInput.files[0]);
-    }
 
-    if (!isEdit) {
-      fetch(`${API_URL}/dodaj_sportistu.php`, { method: "POST", body: formData })
-        .then(async (res) => {
-          if (!res.ok) throw new Error((await res.json()).poruka || "Greška pri dodavanju.");
-          return res.json();
-        })
-        .then((odgovor) => { alert(odgovor.poruka); osvjeziPodatke(); })
-        .catch((err) => alert(err.message));
-    } else {
-      formData.append("sportistaId", sportistaIdZaIzmjenu);
-      fetch(`${API_URL}/uredi_sportistu.php`, { method: "POST", body: formData })
-        .then(async (res) => {
-          if (!res.ok) throw new Error((await res.json()).poruka || "Greška pri uređivanju.");
-          return res.json();
-        })
-        .then((odgovor) => { alert(odgovor.poruka); osvjeziPodatke(); })
-        .catch((err) => alert(err.message));
-    }
+  
+  if (podaciSportiste.slika) {
+    formData.append("slika", podaciSportiste.slika);
   }
+
+  if (!isEdit) {
+    fetch(`${API_URL}/dodaj_sportistu.php`, { method: "POST", body: formData })
+      .then(async (res) => {
+        if (!res.ok) throw new Error((await res.json()).poruka || "Greška pri dodavanju.");
+        return res.json();
+      })
+      .then((odgovor) => { alert(odgovor.poruka); osvjeziPodatke(); })
+      .catch((err) => alert(err.message));
+  } else {
+    formData.append("sportistaId", sportistaIdZaIzmjenu);
+    fetch(`${API_URL}/uredi_sportistu.php`, { method: "POST", body: formData })
+      .then(async (res) => {
+        if (!res.ok) throw new Error((await res.json()).poruka || "Greška pri uređivanju.");
+        return res.json();
+      })
+      .then((odgovor) => { alert(odgovor.poruka); osvjeziPodatke(); })
+      .catch((err) => alert(err.message));
+  }
+}
 
   function obrisiSportistu(sportistaId, ime) {
     if (!window.confirm(`Da li ste sigurni da želite obrisati sportistu ${ime}?`)) return;

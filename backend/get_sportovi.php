@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-require_once __DIR__ . "/konekcija.php";
+require_once __DIR__ . "/config.php";
 
 $sportovi = $konekcija
     ->query("SELECT id, naziv, opis, savez, slika FROM sportovi ORDER BY id ASC")

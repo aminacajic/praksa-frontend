@@ -16,9 +16,9 @@ export default function AdminFormaSportista({ sportovi, sportistaZaIzmjenu, onSa
   const [novaPozicija, setNovaPozicija] = useState("");
 
   const pozicije = useMemo(
-    () => sportovi.find((s) => s.id === odabraniSportId)?.pozicije || [],
-    [sportovi, odabraniSportId]
-  );
+  () => sportovi.find((s) => Number(s.id) === Number(odabraniSportId))?.pozicije || [],
+  [sportovi, odabraniSportId]
+);
 
   function obradiSubmit(e) {
     e.preventDefault();

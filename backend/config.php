@@ -1,7 +1,7 @@
 <?php
-$host = "localhost";
-$user = "root";
-$pass = "";
+$host    = "localhost";
+$user    = "root";
+$pass    = "";
 $db_name = "praksa_sportovi";
 
 try {

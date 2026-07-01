@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-require_once __DIR__ . "/konekcija.php";
+require_once __DIR__ . "/config.php";
 
 $pojam = trim($_GET['pojam'] ?? '');
 
